@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+                html, body {
+            margin: 0;
+        }
+         body {
+            min-height: 200vh;
+         }
+           .bar {
+            position: absolute;
+            top: 0;
+            height: 200vh;
+            width: 120px;
+            background-color: #add8f7;
+        }
+
+        .bar-links {
+            left: 50px;
+        }
+
+        .bar-rechts {
+            right: 50px;
+        }
+        .burger {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+
+    font-size: 35px;
+    color: white;
+    background-color: black;
+
+    padding: 5px 12px;
+    cursor: pointer;
+
+    z-index: 10;
+}
+
+#menu {
+    display: none;
+
+    position: fixed;
+    top: 75px;
+    right: 20px;
+
+    background-color: black;
+    padding: 15px;
+
+    z-index: 10;
+}
+
+#menu a {
+    display: block;
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+}
+
+#menu a:hover {
+    background-color: #333;
+} p {
+    font-family: "Inter", sans-serif;
+    margin-top: 20px;
+    margin-left: 180px;
+    font-size: 30px;
+    font-weight: 30px;
+} input {
+    margin-top: 20px;
+    margin-left: 300px;
+    margin-right: 200px;
+    height: 20px;
+    width: 50px;
+
+} span {
+    margin-top: 20px;
+    margin-left: 400px;
+    margin-right: 300px;
+    font-size: 20px;
+}p {
+    font-family: "Inter", sans-serif;
+    margin-top: 40px;
+    margin-left: 180px;
+    font-size: 20px;
+    font-weight: 30px;
+} button{
+    margin-top: 70px;
+    margin-left: 400px;
+    margin-right: 200px;
+} p {
+     font-family: "Inter", sans-serif;
+    font-size: 15px;
+    font-weight: 20px;
+    margin-top: 70px;
+    margin-left: 450px;
+    margin-right: 200px;
+}
+
+    </style>
+    <script>function menuOeffnen() {
+    let menu = document.getElementById("menu");
+
+    if (menu.style.display === "block") {
+        menu.style.display = "none";
+    } else {
+        menu.style.display = "block";
+    }
+}
+function checkAntwort1(event) {
+    event.preventDefault();
+
+    let antwort = document.getElementById("antwort1").value;
+
+    if (antwort === "Wien") {
+        document.getElementById("ergebnis1").textContent = "Richtig!";
+    } else {
+        document.getElementById("ergebnis1").textContent = "Falsch!";
+    }
+}
+function checkAntwort2(event) {
+    event.preventDefault();
+
+    let antwort = document.getElementById("antwort2").value;
+
+    if (antwort.toLowerCase() === "2") {
+        document.getElementById("ergebnis2").textContent = "Richtig!";
+    } else {
+        document.getElementById("ergebnis2").textContent = "Falsch!";
+    }
+} 
+function checkAntwort3(event) {
+    event.preventDefault();
+
+    let istRichtig = document.getElementById("radio1").checked;
+    
+
+    if (istRichtig) {
+        document.getElementById("ergebnis3").textContent = "Richtig aber geh duschen und touch some grass brochacho!";
+}     else {
+    document.getElementById("ergebnis3").textContent = "Falsch! Lüg nicht!";
+}
+}
+</script>
+   
+</head>
+<body>
+    
+    <div class="bar bar-links"></div>
+<div class="bar bar-rechts"></div>
+
+    <div class="burger" onclick="menuOeffnen()">
+    ☰
+</div>
+
+<div id="menu">
+    <a href="index.html">Seite 1</a>
+    <a href="seite2.html">Seite 2</a>
+    <a href="seite3.html">Seite 3</a>
+</div>
+<p>1. Was ist die Hauptstadt von Österreich?</p>
+
+<form onsubmit="checkAntwort1(event)" autocomplete="off">
+    <input type="text" id="antwort1">
+</form>
+
+<p id="ergebnis1"></p>
+
+<p>2. Wie oft wurde Donald Trump zum U.S. Amerikanischen Präsident gewählt?</p>
+
+<form onsubmit="checkAntwort2(event)" autocomplete="off">
+    <input type="text" id="antwort2">
+</form>
+
+<p id="ergebnis2"></p>
+
+ <p>3. Wie oft hast du in den letzten 7 Tagen geduscht/Gras berührt</p>
+ <form onsubmit="checkAntwort3(event)">
+<label>
+    <input type="radio" name="stadt" id="radio1"> 0
+</label><br>
+
+<label>
+    <input type="radio" name="stadt" id="radio2"> 3
+</label><br>
+
+<label>
+    <input type="radio" name="stadt" id="radio3"> 7
+</label><br><br>
+
+<button type="submit">Check</button>
+<p id="ergebnis3"></p>
+</form>
+
+
+
+
+
+
+    
+</body>
+</html>

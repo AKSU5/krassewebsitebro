@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+                html, body {
+            margin: 0;
+        }
+         body {
+            min-height: 200vh;
+         }
+          .bar {
+            position: absolute;
+            top: 0;
+            height: 200vh;
+            width: 120px;
+            background-color: #add8f7;
+        }
+
+        .bar-links {
+            left: 50px;
+        }
+
+        .bar-rechts {
+            right: 50px;
+        }
+        .burger {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+
+    font-size: 35px;
+    color: white;
+    background-color: black;
+
+    padding: 5px 12px;
+    cursor: pointer;
+
+    z-index: 10;
+}
+
+#menu {
+    display: none;
+
+    position: fixed;
+    top: 75px;
+    right: 20px;
+
+    background-color: black;
+    padding: 15px;
+
+    z-index: 10;
+}
+
+#menu a {
+    display: block;
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+}
+
+#menu a:hover {
+    background-color: #333;
+}
+#zahlBox {
+    width: 100px;
+    height: 60px;
+    border: 2px solid black;
+    margin-top: 15px;
+    margin-left: 200px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 30px;
+}
+.zufallsbutton {
+    background-color: green;
+    color: black;
+    border: none;
+    padding: 12px 25px;
+    font-size: 18px;
+    cursor: pointer;
+    border-radius: 8px;
+    margin-top: 10px;
+    margin-left: 200px;
+}   
+.arrow {
+    margin-left: 400px;
+    margin-top: 30px;
+}
+h1 {
+    font-family: "Inter", sans-serif;
+    font-size: 40px;
+    font-weight: 800px;
+    color: black;
+    margin-top: 30px; 
+    margin-left: 420px;
+}
+h1 {
+    font-family: "Inter", sans-serif;
+    font-size: 50px;
+    font-weight: 800px;
+    color: black;
+    margin-top: 100px;
+    margin-left: 300px;
+    margin-right: 300px;
+}
+h2 {
+    font-family: "Inter", sans-serif;
+    font-size: 40px;
+    font-weight: 500px;
+    color: darkolivegreen;
+    margin-top: 130px;
+    margin-left: 130px;
+    margin-right: 300px;
+}
+h2 {
+    font-family: "Inter", sans-serif;
+    font-size: 40px;
+    font-weight: 500px;
+    color: darkolivegreen;
+    margin-top: 130px;
+    margin-right: 175px;
+    margin-left: 300px;
+}
+h3 {
+    font-style: italic;
+    font-size: 40px;
+    font-weight: 400px;
+    color: #333;
+    margin-top: 160px;
+    margin-left: 200px;
+    margin-right: 200px;
+}
+   
+   </style>
+    <script>
+        function menuOeffnen() {
+    let menu = document.getElementById("menu");
+
+    if (menu.style.display === "block") {
+        menu.style.display = "none";
+    } else {
+        menu.style.display = "block";
+    }
+}
+function zufallszahl() {
+    let zahl = Math.floor(Math.random() * 100) + 1;
+
+    document.getElementById("zahlBox").textContent = zahl;
+}
+ </script>
+</head>
+<body>
+    
+    <div class="bar bar-links"></div>
+<div class="bar bar-rechts"></div>
+
+    <div class="burger" onclick="menuOeffnen()">
+    ☰
+</div>
+
+<div id="menu">
+    <a href="index.html">Seite 1</a>
+    <a href="seite2.html">Seite 2</a>
+    <a href="seite3.html">Seite 3</a>
+</div>
+<button class="zufallsbutton" onclick="zufallszahl()">Zufallszahl</button>
+
+<div id="zahlBox">?</div>
+
+<span class="arrow" style='font-size:100px;'>&#8598;</span>
+
+<h1>Cool, oder?</h1>
+
+<h1>Ja egaal, ich hab hab halt keine ahnung was ich tun soll bitte hilf mir</h1>
+
+<h2>aber</h2>
+
+<h2>warte </h2>
+
+<h3>Schau auf Seite 3</h3>
+</body>
+</html>

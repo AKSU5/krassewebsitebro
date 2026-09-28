@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>krasse website bro</title>
+    <style>
+        html, body {
+            margin: 0;
+        }
+         body {
+            min-height: 200vh;
+         }
+
+        .bild {
+            min-height: 80vh;
+            background-image: url(berge.png);
+               background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+           
+        }
+             .bar {
+            position: absolute;
+            top: 0;
+            height: 200vh;
+            width: 120px;
+            background-color: #add8f7;
+        }
+
+        .bar-links {
+            left: 50px;
+        }
+
+        .bar-rechts {
+            right: 50px;
+        }
+        .burger {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+
+    font-size: 35px;
+    color: white;
+    background-color: black;
+
+    padding: 5px 12px;
+    cursor: pointer;
+
+    z-index: 10;
+}
+
+#menu {
+    display: none;
+
+    position: fixed;
+    top: 75px;
+    right: 20px;
+
+    background-color: black;
+    padding: 15px;
+
+    z-index: 10;
+}
+
+#menu a {
+    display: block;
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+}
+
+#menu a:hover {
+    background-color: #333;
+}
+h1 {
+    font-family: "Inter", sans-serif;
+    font-size: 30px;
+    font-weight: 600;
+    color: black;
+    text-align: center;
+}
+h2 {
+    font-family: "Inter", sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: black;
+    text-align: center;
+    margin-top: 35px;
+}
+h1 {
+    font-family: "Inter", sans-serif;
+    font-size: 40px;
+    font-weight: 700;
+    color: black;
+    text-align: center;
+    margin-top: 45px;
+} 
+h2 {
+    font-family: "Inter", sans-serif;
+    font-size: 25px;
+    font-weight: 650;
+    color: black;
+    text-align: center;
+    margin-top: 60px;
+
+}
+.mitte {
+    text-align: center;
+}
+
+.roter-button {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    font-size: 18px;
+    cursor: pointer;
+    border-radius: 8px;
+}
+
+#meinBild {
+    display: none;
+    width: 500px;
+    margin: 40px auto 0;
+}
+
+    </style>
+    <script>
+    "use strict";
+
+    if (sessionStorage.getItem("eingeloggt") !== "ja") {
+
+      let benutzername;
+        let passwort;
+
+        while (benutzername !== "Charlie Kirk" || passwort !== "charliekirky") {
+
+            benutzername = prompt("Benutzername");
+            passwort = prompt("Passwort");
+
+            if (benutzername !== "Charlie Kirk" || passwort !== "charliekirky") {
+                alert("Try again");
+            }
+        }
+
+            sessionStorage.setItem("eingeloggt", "ja");
+}
+        function menuOeffnen() {
+    let menu = document.getElementById("menu");
+
+    if (menu.style.display === "block") {
+        menu.style.display = "none";
+    } else {
+        menu.style.display = "block";
+    }
+}
+function bildAnzeigen() {
+    let bild = document.getElementById("meinBild");
+
+    if (bild.style.display === "block") {
+        bild.style.display = "none";
+    } else {
+        bild.style.display = "block";
+    }
+}
+
+        </script>
+</head>
+<body>
+    <div class="bild"></div>
+
+    <div class="bar bar-links"></div>
+<div class="bar bar-rechts"></div>
+
+<h1>Weißt du, wozu diese Website von Nutzen ist?</h1>
+
+<h2>Nein?</h2>
+
+<h1>Ich auch nicht</h1>
+
+<h2>Aber vertrau mir das ist eine krasse Website bro</h2>
+
+ <div class="inhalt"> </div>
+ <div class="burger" onclick="menuOeffnen()">
+    ☰
+</div>
+
+<div id="menu">
+    <a href="index.html">Seite 1</a>
+    <a href="seite2.html">Seite 2</a>
+    <a href="seite3.html">Seite 3</a>
+</div>
+
+
+<div class="mitte">
+
+<button class="roter-button" onclick="bildAnzeigen()">Bild anzeigen</button>
+
+<img id="meinBild" src="son.png">
+    </div>
+</body>
+</html>
