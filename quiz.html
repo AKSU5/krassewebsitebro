@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biologie-Quiz</title>
+    <style>
+        html, body { margin: 0; }
+        body { position: relative; min-height: 100vh; }
+        .bar {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            width: 120px;
+            background-color: #add8f7;
+        }
+        .bar-links { left: 50px; }
+        .bar-rechts { right: 50px; }
+        .burger {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            font-size: 35px;
+            color: white;
+            background-color: black;
+            padding: 5px 12px;
+            cursor: pointer;
+            z-index: 10;
+        }
+        #menu {
+            display: none;
+            position: fixed;
+            top: 75px;
+            right: 20px;
+            background-color: black;
+            padding: 15px;
+            z-index: 10;
+        }
+        #menu a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+        }
+        #menu a:hover { background-color: #333; }
+
+        /* Quiz sitzt zwischen den beiden blauen Balken */
+        .quiz-platz { position: relative; margin: 0 200px; padding: 40px 0; }
+        @media (max-width: 900px) {
+            .bar { display: none; }
+            .quiz-platz { margin: 0 8px; padding-top: 80px; }
+        }
+    </style>
+    <script>
+        function menuOeffnen() {
+            let menu = document.getElementById("menu");
+            if (menu.style.display === "block") {
+                menu.style.display = "none";
+            } else {
+                menu.style.display = "block";
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="bar bar-links"></div>
+    <div class="bar bar-rechts"></div>
+
+    <div class="burger" onclick="menuOeffnen()">☰</div>
+
+    <div id="menu">
+        <a href="index.html">Seite 1</a>
+        <a href="seite2.html">Seite 2</a>
+        <a href="seite3.html">Seite 3</a>
+        <a href="quiz.html">Biologie-Quiz</a>
+    </div>
+
+    <div class="quiz-platz">
+<style> 
+  .bq {
+    --bq-bg: #f6f7fb;
+    --bq-card: #ffffff;
+    --bq-ink: #1c2433;
+    --bq-muted: #5d6677;
+    --bq-line: #d9dde8;
+    --bq-blue: #1f3fa8;
+    --bq-blue-soft: #e4e9fb;
+    --bq-good: #1f7a4d;
+    --bq-good-soft: #dff3e8;
+    --bq-bad: #b23a2b;
+    --bq-bad-soft: #fbe5e1;
+    --bq-mark: #ffe96b;
+    box-sizing: border-box;
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 20px 16px 28px;
+    background: var(--bq-bg);
+    color: var(--bq-ink);
+    font-family: "Avenir Next", "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
+    font-size: 17px;
+    line-height: 1.5;
+    border-radius: 14px;
+    outline: none;
+  }
+  @media (prefers-color-scheme: dark) {
+    .bq {
+      --bq-bg: #151a26;
+      --bq-card: #1e2536;
+      --bq-ink: #e8ebf3;
+      --bq-muted: #a2abbd;
+      --bq-line: #333c52;
+      --bq-blue: #8fa8ff;
+      --bq-blue-soft: #26305a;
+      --bq-good: #6fd49b;
+      --bq-good-soft: #1b3a2b;
+      --bq-bad: #ff9a8a;
+      --bq-bad-soft: #43241f;
+      --bq-mark: #6b5f10;
+    }
+  }
+  .bq *, .bq *::before, .bq *::after { box-sizing: border-box; }
+  .bq h2 { margin: 0 0 6px; font-size: 1.7rem; line-height: 1.2; letter-spacing: -0.01em; }
+  .bq h2 span { background: linear-gradient(transparent 58%, var(--bq-mark) 58%); padding: 0 2px; }
+  .bq h3 { margin: 22px 0 8px; font-size: 1.05rem; }
+  .bq p { margin: 0 0 12px; }
+  .bq .bq-muted { color: var(--bq-muted); font-size: 0.95rem; }
+
+  .bq button {
+    font: inherit; color: inherit; cursor: pointer;
+    border: 1.5px solid var(--bq-line); background: var(--bq-card);
+    border-radius: 10px; padding: 10px 14px;
+  }
+  .bq button:focus-visible, .bq select:focus-visible { outline: 3px solid var(--bq-blue); outline-offset: 2px; }
+  .bq .bq-primary {
+    background: var(--bq-blue); border-color: var(--bq-blue); color: #fff; font-weight: 600;
+  }
+  @media (prefers-color-scheme: dark) { .bq .bq-primary { color: #0f1424; } }
+  .bq .bq-primary:disabled { opacity: 0.45; cursor: not-allowed; }
+
+  .bq .bq-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 4px; }
+  .bq .bq-chip { padding: 8px 12px; font-size: 0.95rem; }
+  .bq .bq-chip[aria-pressed="true"] {
+    background: var(--bq-blue-soft); border-color: var(--bq-blue); color: var(--bq-blue); font-weight: 600;
+  }
+  .bq select {
+    font: inherit; padding: 9px 10px; border-radius: 10px;
+    border: 1.5px solid var(--bq-line); background: var(--bq-card); color: var(--bq-ink);
+  }
+  .bq .bq-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 16px; }
+
+  .bq .bq-bar { height: 8px; border-radius: 99px; background: var(--bq-line); overflow: hidden; }
+  .bq .bq-bar > div { height: 100%; background: var(--bq-blue); transition: width 0.25s ease; }
+  .bq .bq-meta { display: flex; justify-content: space-between; gap: 10px; margin: 8px 0 18px; }
+
+  .bq .bq-card {
+    background: var(--bq-card); border: 1.5px solid var(--bq-line);
+    border-radius: 14px; padding: 18px 16px;
+  }
+  .bq .bq-q { font-size: 1.15rem; font-weight: 650; margin: 0 0 14px; line-height: 1.4; }
+  .bq .bq-opts { display: grid; gap: 10px; }
+  .bq .bq-opt {
+    display: flex; gap: 12px; align-items: flex-start; text-align: left; width: 100%;
+    padding: 12px 14px;
+  }
+  .bq .bq-opt .bq-key {
+    flex: none; width: 26px; height: 26px; border-radius: 7px;
+    display: grid; place-items: center; font-size: 0.85rem; font-weight: 700;
+    background: var(--bq-blue-soft); color: var(--bq-blue);
+  }
+  .bq .bq-opt:hover:not(:disabled) { border-color: var(--bq-blue); }
+  .bq .bq-opt:disabled { cursor: default; }
+  .bq .bq-opt.bq-right { background: var(--bq-good-soft); border-color: var(--bq-good); }
+  .bq .bq-opt.bq-right .bq-key { background: var(--bq-good); color: #fff; }
+  .bq .bq-opt.bq-wrong { background: var(--bq-bad-soft); border-color: var(--bq-bad); }
+  .bq .bq-opt.bq-wrong .bq-key { background: var(--bq-bad); color: #fff; }
+
+  .bq .bq-fb { margin-top: 14px; padding: 12px 14px; border-radius: 10px; border-left: 5px solid; }
+  .bq .bq-fb.ok { background: var(--bq-good-soft); border-color: var(--bq-good); }
+  .bq .bq-fb.no { background: var(--bq-bad-soft); border-color: var(--bq-bad); }
+  .bq .bq-fb strong { display: block; margin-bottom: 2px; }
+
+  .bq .bq-score { font-size: 3rem; font-weight: 750; line-height: 1.1; margin: 4px 0; }
+  .bq table { width: 100%; border-collapse: collapse; margin-top: 6px; font-size: 0.97rem; }
+  .bq th, .bq td { text-align: left; padding: 7px 6px; border-bottom: 1px solid var(--bq-line); }
+  .bq td:last-child, .bq th:last-child { text-align: right; white-space: nowrap; }
+  .bq .bq-miss { padding: 10px 0; border-bottom: 1px solid var(--bq-line); }
+  .bq .bq-miss b { display: block; }
+  .bq .bq-miss span { color: var(--bq-good); font-weight: 600; }
+
+  @media (prefers-reduced-motion: reduce) { .bq .bq-bar > div { transition: none; } }
+</style>
+
+<div class="bq" id="bio-quiz" tabindex="-1" aria-live="polite"></div>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ---------- FRAGEN ----------
+     Format: [Thema, Frage, RICHTIGE Antwort, falsch, falsch, falsch, Erklärung]
+     Die Reihenfolge der Antworten wird beim Anzeigen automatisch gemischt. */
+  var T1 = "Ernährung & Stoffwechsel";
+  var T2 = "Wirkstoffe";
+  var T3 = "Verdauung";
+  var T4 = "Ausscheidung";
+  var T5 = "Atmung";
+
+  var QUESTIONS = [
+    /* ===== ERNÄHRUNG & STOFFWECHSEL ===== */
+    [T1, "Was gehört alles zum Stoffwechsel?",
+      "Ernährung, Verdauung, Stoffumsetzung, Ausscheidung und Verteilung der Stoffe im Körper",
+      "Nur Ernährung und Verdauung",
+      "Nur Atmung und Blutkreislauf",
+      "Nur Ausscheidung und Fortpflanzung",
+      "Zum Stoffwechsel gehört auch die Verteilung der Stoffe, also Atmung und Blutkreislauf."],
+    [T1, "Welche 2 Stoffwechselarten unterscheidet man?",
+      "Baustoffwechsel und Betriebsstoffwechsel",
+      "Fettstoffwechsel und Zuckerstoffwechsel",
+      "Außenstoffwechsel und Innenstoffwechsel",
+      "Tagstoffwechsel und Nachtstoffwechsel",
+      "Baustoffwechsel = Aufbau von Körpersubstanz, Betriebsstoffwechsel = Versorgung der Organe, damit der „Betrieb“ läuft."],
+    [T1, "Welches Beispiel gehört zum Baustoffwechsel?",
+      "Kalzium wird in die Knochen eingebaut",
+      "Die Organe werden mit Sauerstoff versorgt",
+      "Die Lunge atmet Kohlendioxid aus",
+      "Die Niere bildet Harn",
+      "Auch Eiweiß für den Muskelaufbau ist Baustoffwechsel."],
+    [T1, "Was bedeutet Betriebsstoffwechsel?",
+      "Alle Organe müssen mit Energie, Sauerstoff und Wirkstoffen versorgt werden, damit der „Betrieb“ Körper funktioniert",
+      "Der Körper baut neue Knochen und Muskeln auf",
+      "Der Körper scheidet Abfallstoffe aus",
+      "Der Körper speichert Fett für den Winter",
+      "Betriebsstoffwechsel = Versorgung der Organe."],
+    [T1, "Wie lauten die drei Nährstoffgruppen?",
+      "Kohlenhydrate, Fette und Eiweiße",
+      "Vitamine, Mineralstoffe und Spurenelemente",
+      "Wasser, Salz und Zucker",
+      "Glucose, Glycerin und Aminosäuren",
+      "Vitamine, Mineralstoffe und Spurenelemente sind Wirkstoffe, keine Nährstoffe."],
+    [T1, "Welches Lebensmittel ist eine typische Kohlenhydratquelle?",
+      "Nudeln",
+      "Butter",
+      "Hühnerei",
+      "Olivenöl",
+      "Nudeln, Brot, Reis und Kartoffeln liefern vor allem Kohlenhydrate."],
+    [T1, "Welches Lebensmittel ist eine typische Fettquelle?",
+      "Butter",
+      "Reis",
+      "Brot",
+      "Apfel",
+      "Butter und Öl bestehen hauptsächlich aus Fett."],
+    [T1, "Welches Lebensmittel ist eine typische Eiweißquelle?",
+      "Fleisch",
+      "Zucker",
+      "Reis",
+      "Pflanzenöl",
+      "Eiweiß steckt z. B. in Fleisch, Eiern, Fisch, Milch und Hülsenfrüchten."],
+    [T1, "Wie kann man zu Kohlenhydraten, Fetten und Eiweißen noch sagen?",
+      "Polysaccharide, Lipide, Proteine",
+      "Lipide, Polysaccharide, Proteine",
+      "Proteine, Lipide, Polysaccharide",
+      "Enzyme, Lipide, Proteine",
+      "Kohlenhydrate = Vielfachzucker (Polysaccharide), Fette = Lipide, Eiweiße = Proteine."],
+    [T1, "Was ist der Grundbaustein der Kohlenhydrate?",
+      "Der Einfachzucker Glucose (Traubenzucker)",
+      "Glycerin",
+      "Aminosäuren",
+      "Fettsäuren",
+      "Glucose ist der Einfachzucker. Zweifachzucker sind z. B. Maltose und Saccharose."],
+    [T1, "Was ist ein Zweifachzucker?",
+      "Saccharose",
+      "Glucose",
+      "Glycerin",
+      "Harnstoff",
+      "Zweifachzucker: Maltose und Saccharose."],
+    [T1, "Woraus bestehen die Grundbausteine der Fette?",
+      "Aus Glycerin und Fettsäuren",
+      "Aus Glucose und Aminosäuren",
+      "Aus Aminosäuren und Harnstoff",
+      "Aus Glycerin und Glucose",
+      "Jeweils drei Fettsäuren verbinden sich mit einem Glycerin zu einem Fettmolekül."],
+    [T1, "Wie viele Fettsäuren verbinden sich mit einem Glycerin zu einem Fettmolekül?",
+      "Drei",
+      "Eine",
+      "Zwei",
+      "Zwanzig",
+      "Drei Fettsäuren + ein Glycerin."],
+    [T1, "Wie heißen die Grundbausteine der Eiweiße?",
+      "Aminosäuren",
+      "Fettsäuren",
+      "Einfachzucker",
+      "Mineralstoffe",
+      "Es gibt etwa 20 verschiedene Aminosäuren, z. B. Prolin und Serin."],
+    [T1, "Wie viele verschiedene Aminosäuren gibt es ungefähr?",
+      "Etwa 20",
+      "Etwa 3",
+      "Etwa 200",
+      "Etwa 2000",
+      "Etwa 20 verschiedene Aminosäuren bauen die Eiweiße auf."],
+    [T1, "Welche Nährstoffe können vollständig abgebaut werden?",
+      "Kohlenhydrate und Fette",
+      "Nur Eiweiße",
+      "Eiweiße und Fette",
+      "Kohlenhydrate und Eiweiße",
+      "Eiweiße enthalten Stickstoff (N) und können deshalb nicht vollständig abgebaut werden."],
+    [T1, "Zu welchen Stoffen werden Kohlenhydrate vollständig abgebaut?",
+      "Kohlendioxid und Wasser",
+      "Harnstoff und Wasser",
+      "Sauerstoff und Wasser",
+      "Glycerin und Fettsäuren",
+      "Kohlenhydrate (und Fette) werden vollständig zu Kohlendioxid und Wasser abgebaut."],
+    [T1, "Warum können Eiweiße nicht vollständig abgebaut werden?",
+      "Weil sie Stickstoff (N) enthalten",
+      "Weil sie zu groß sind",
+      "Weil sie kein Wasser enthalten",
+      "Weil sie nur aus Fettsäuren bestehen",
+      "Wegen des Stickstoffs bleibt Harnstoff übrig."],
+    [T1, "Bis zu welchem Stoff werden Eiweiße abgebaut?",
+      "Harnstoff",
+      "Kohlendioxid",
+      "Glycerin",
+      "Traubenzucker",
+      "Harnstoff wird über die Niere ausgeschieden."],
+    [T1, "Warum haben Eiweiße einen niedrigeren Brennwert?",
+      "Weil sie nicht vollständig abgebaut werden können",
+      "Weil sie kein Wasser enthalten",
+      "Weil sie zu schnell verdaut werden",
+      "Weil sie nur im Magen verdaut werden",
+      "Da bei Eiweißen noch Energie im Harnstoff „stecken bleibt“, ist der Brennwert niedriger."],
+    [T1, "Was versteht man unter „essenziell“?",
+      "Aminosäuren und Fettsäuren, die der Körper nicht selbst herstellen kann und die mit der Nahrung aufgenommen werden müssen",
+      "Stoffe, die der Körper nur in Spuren braucht",
+      "Stoffe, die der Körper ausscheidet",
+      "Stoffe, die nur in Gemüse vorkommen",
+      "Essenzielle Aminosäuren und Fettsäuren müssen mit der Nahrung kommen."],
+    [T1, "Welche beiden Maßeinheiten gibt es für die Energie in Lebensmitteln?",
+      "Kilokalorien (kcal) und Kilojoule (kJ)",
+      "Kilogramm (kg) und Gramm (g)",
+      "Kilometer (km) und Meter (m)",
+      "Milligramm (mg) und Mikrogramm (µg)",
+      "Energie wird in kcal oder kJ angegeben."],
+    [T1, "Was ist Bulimie?",
+      "Ess-Brechsucht",
+      "Eine Vitaminmangelkrankheit",
+      "Eine Nierenerkrankung",
+      "Eine Form von Vegetarismus",
+      "Bulimie = Ess-Brechsucht."],
+    [T1, "Was kennzeichnet die Magersucht?",
+      "Häufig bei Mädchen, falsches Selbstbild, man isst fast gar nichts mehr",
+      "Man isst unkontrolliert große Mengen und erbricht danach",
+      "Man verzichtet auf tierische Produkte",
+      "Man hat einen Mangel an Vitamin C",
+      "Magersucht: falsches Selbstbild und kaum noch Essen."],
+    [T1, "Wofür steht BMI?",
+      "Body-Mass-Index",
+      "Body-Mineral-Intake",
+      "Basic-Muscle-Index",
+      "Blood-Metabolism-Indicator",
+      "Der BMI gibt an, ob das Gewicht im Normalbereich liegt."],
+    [T1, "Wie berechnet man den BMI?",
+      "Körpergewicht in kg geteilt durch (Körpergröße in m)²",
+      "Körpergröße in m geteilt durch Körpergewicht in kg",
+      "Körpergewicht in kg mal Körpergröße in m",
+      "Körpergewicht in kg geteilt durch das Alter",
+      "BMI = kg/(m)²."],
+    [T1, "Was ist der Unterschied zwischen Vegetariern und Veganern?",
+      "Veganer essen und nutzen überhaupt keine tierischen Produkte (auch kein Leder oder Wolle)",
+      "Vegetarier essen Fleisch, Veganer nicht",
+      "Veganer essen Eier, Vegetarier nicht",
+      "Es gibt keinen Unterschied",
+      "Veganer sind Vegetarier, die gar keine tierischen Produkte essen oder nutzen."],
+    [T1, "Auf was verzichten Ovo-Lacto-Vegetarier NICHT?",
+      "Auf Eier (ovum) und Milch (lac)",
+      "Auf Fleisch",
+      "Auf Fisch",
+      "Auf Honig und Wolle",
+      "Ovo-Lacto-Vegetarier essen Eier und Milchprodukte, aber kein Fleisch."],
+
+    /* ===== WIRKSTOFFE ===== */
+    [T2, "Was zählt zu den Wirkstoffen?",
+      "Vitamine, Mineralstoffe und Spurenelemente",
+      "Kohlenhydrate, Fette und Eiweiße",
+      "Glucose, Glycerin und Aminosäuren",
+      "Wasser, Luft und Nahrung",
+      "Wirkstoffe sind keine Energielieferanten."],
+    [T2, "Warum heißen Spurenelemente „Spuren“-elemente?",
+      "Weil sie nur in winzigen Mengen benötigt werden",
+      "Weil sie Spuren im Körper hinterlassen",
+      "Weil man sie nur in Spuren findet, wenn man krank ist",
+      "Weil sie nur in Fußspuren vorkommen",
+      "Wirkstoffe werden nur in Spuren, d. h. in winzigen Mengen, benötigt."],
+    [T2, "Welche 2 Gruppen von Vitaminen unterscheidet man?",
+      "Wasserlösliche und fettlösliche Vitamine",
+      "Tierische und pflanzliche Vitamine",
+      "Essenzielle und nicht essenzielle Vitamine",
+      "Süße und saure Vitamine",
+      "Wasserlöslich: B und C. Fettlöslich: A, D, E, K."],
+    [T2, "Welche Vitamine sind wasserlöslich?",
+      "Die B-Vitamine und Vitamin C",
+      "A, D, E und K",
+      "A und C",
+      "D und E",
+      "Wasserlösliche Vitamine: Bs und C."],
+    [T2, "Welche Vitamine sind fettlöslich?",
+      "A, D, E und K",
+      "B und C",
+      "A, B und C",
+      "C, D und K",
+      "Fettlösliche Vitamine: A, D, E, K."],
+    [T2, "Welche Krankheit entsteht bei Vitamin-A-Mangel?",
+      "Nachtblindheit",
+      "Skorbut",
+      "Rachitis",
+      "Beri-Beri",
+      "Vitamin A: Nachtblindheit."],
+    [T2, "Welche Krankheit entsteht bei Vitamin-B-Mangel?",
+      "Beri-Beri (Nervenleiden)",
+      "Nachtblindheit",
+      "Skorbut",
+      "Rachitis",
+      "Vitamin B: Beri-Beri."],
+    [T2, "Welche Krankheit entsteht bei Vitamin-C-Mangel?",
+      "Skorbut",
+      "Rachitis",
+      "Nachtblindheit",
+      "Beri-Beri",
+      "Skorbut (Seefahrerkrankheit): Zahnfleischbluten und Zahnausfall."],
+    [T2, "Welche Krankheit entsteht bei Vitamin-D-Mangel?",
+      "Rachitis (Knochenverkrümmung)",
+      "Skorbut",
+      "Nachtblindheit",
+      "Beri-Beri",
+      "Vitamin D: Rachitis."],
+    [T2, "Wie äußerte sich Skorbut bei Seefahrern?",
+      "Zahnfleischbluten und Zahnausfall",
+      "Verkrümmte Knochen",
+      "Schlechtes Sehen in der Dämmerung",
+      "Nervenschmerzen",
+      "Sauerkraut war haltbarer als Citrusfrüchte und half dagegen."],
+    [T2, "Welcher Stoff ist ein Spurenelement?",
+      "Jod",
+      "Kalzium",
+      "Magnesium",
+      "Natrium",
+      "Spurenelemente: z. B. Jod, Eisen, Fluor. Mineralstoffe: z. B. Kalzium, Magnesium, Natrium."],
+    [T2, "Welcher Stoff ist ein Mineralstoff?",
+      "Magnesium",
+      "Jod",
+      "Eisen",
+      "Fluor",
+      "Mineralstoffe: z. B. Kalzium, Magnesium, Natrium."],
+    [T2, "Welche Funktion hat Kalzium?",
+      "Knochenaufbau und Blutgerinnung",
+      "Sauerstofftransport im Blut",
+      "Bildung von Schilddrüsenhormonen",
+      "Schutz der Zähne vor Karies",
+      "Kalzium steckt in Milchprodukten, Vollwertprodukten, Hülsenfrüchten und Nüssen."],
+    [T2, "Welche Funktion hat Eisen?",
+      "Blutfarbstoff und Sauerstofftransport",
+      "Knochenaufbau",
+      "Zahnfestigkeit",
+      "Bildung der Verdauungssäfte",
+      "Eisen steckt z. B. in Hülsenfrüchten und Nüssen."],
+    [T2, "Wofür braucht der Körper Jod?",
+      "Für die Schilddrüse (Jodhormon)",
+      "Für die Zähne",
+      "Für das Blut",
+      "Für die Muskeln",
+      "Jod steckt z. B. in Seefisch, Lebertran, Milchprodukten und Eiern."],
+    [T2, "Wofür braucht der Körper Fluor?",
+      "Für Zahnfestigkeit und Knochen",
+      "Für die Schilddrüse",
+      "Für die Blutgerinnung",
+      "Für die Nervenleitung",
+      "Fluor steckt in Trinkwasser und schwarzem Tee."],
+    [T2, "Wofür braucht der Körper Magnesium?",
+      "Für die Muskelarbeit und die Nervenimpulse",
+      "Für den Sauerstofftransport",
+      "Für die Schilddrüse",
+      "Für die Zähne",
+      "Magnesium steckt in Vollwertprodukten, Nüssen, grünem Salat und Gemüse."],
+    [T2, "Wofür braucht der Körper Natrium?",
+      "Für die Erregbarkeit der Nerven und den Wasserhaushalt",
+      "Für den Knochenaufbau",
+      "Für den Blutfarbstoff",
+      "Für die Zähne",
+      "Natrium steckt in Käse, Wurst, Oliven, gesalzenen und geräucherten Fischen."],
+    [T2, "Wofür braucht der Körper Kalium?",
+      "Für die Erregungsleitung im Herz und den Flüssigkeitshaushalt",
+      "Für die Blutgerinnung",
+      "Für die Schilddrüse",
+      "Für die Zahnfestigkeit",
+      "Kalium steckt in Sojamehl, Weizenkleie und Bananen."],
+    [T2, "Welcher Stoff hilft, die Zähne fest zu halten?",
+      "Fluor",
+      "Jod",
+      "Eisen",
+      "Natrium",
+      "Fluor – Zahnfestigkeit."],
+    [T2, "In welchem Lebensmittel steckt viel Jod?",
+      "Seefisch",
+      "Banane",
+      "Reis",
+      "Butter",
+      "Jod: Seefisch, Lebertran, Milchprodukte, Eier."],
+
+    /* ===== VERDAUUNG ===== */
+    [T3, "Welche Aufgabe haben die Zähne?",
+      "Die Nahrung mechanisch zerkleinern",
+      "Verdauungssäfte bilden",
+      "Eiweiße spalten",
+      "Nährstoffe ins Blut aufnehmen",
+      "Zähne zerkleinern nur mechanisch – sie bilden keinen Verdauungssaft."],
+    [T3, "Welchen Verdauungssaft bilden die Speicheldrüsen?",
+      "Speichel (mit dem Enzym Amylase)",
+      "Magensaft",
+      "Gallensaft",
+      "Darmsaft",
+      "Speichel macht die Nahrung gleitfähig, und die Kohlenhydratverdauung beginnt."],
+    [T3, "Was macht das Enzym Amylase?",
+      "Es spaltet Kohlenhydrate (Stärke)",
+      "Es spaltet Eiweiße",
+      "Es spaltet Fette",
+      "Es neutralisiert die Magensäure",
+      "Amylase im Speichel: Beginn der Kohlenhydratverdauung."],
+    [T3, "Was macht das Enzym Pepsin?",
+      "Es spaltet Eiweiße im Magen",
+      "Es spaltet Kohlenhydrate im Mund",
+      "Es spaltet Fette im Dünndarm",
+      "Es zerlegt Fette in kleine Tröpfchen",
+      "Pepsin steckt im Magensaft."],
+    [T3, "Was macht das Enzym Lipase?",
+      "Es spaltet Fette",
+      "Es spaltet Eiweiße",
+      "Es spaltet Kohlenhydrate",
+      "Es treibt den Speisebrei weiter",
+      "Lipase = Fettverdauung."],
+    [T3, "Was versteht man unter Peristaltik?",
+      "Wellenförmige Muskelbewegungen, die die Nahrung weiterbefördern",
+      "Das Zerkleinern der Nahrung mit den Zähnen",
+      "Das Zerlegen von Fetten in Tröpfchen",
+      "Das Aufnehmen von Nährstoffen ins Blut",
+      "Peristaltik z. B. in der Speiseröhre – man kann sogar im Handstand schlucken."],
+    [T3, "Welche Aufgabe hat die Speiseröhre?",
+      "Die Nahrung durch Peristaltik zum Magen transportieren",
+      "Eiweiße verdauen",
+      "Gallensaft bilden",
+      "Wasser zurückgewinnen",
+      "In der Speiseröhre findet keine Verdauung statt."],
+    [T3, "Was enthält der Magensaft?",
+      "Salzsäure und das Enzym Pepsin",
+      "Galle und Lipase",
+      "Amylase und Wasser",
+      "Nur Wasser und Salz",
+      "Der Magensaft tötet Bakterien ab und verdaut Eiweiße."],
+    [T3, "Welche Aufgaben hat der Magen hauptsächlich?",
+      "Eiweißverdauung und Abtöten von Bakterien",
+      "Fettverdauung und Wasserrückgewinnung",
+      "Kohlenhydratverdauung",
+      "Nährstoffaufnahme ins Blut",
+      "Der Magen verdaut hauptsächlich Eiweiße."],
+    [T3, "Warum verdaut sich der Magen nicht selbst?",
+      "Eine Schleimschicht schützt die Magenwand",
+      "Weil der Magensaft keine Säure enthält",
+      "Weil die Nahrung die Wand schützt",
+      "Weil der Magen nur nachts arbeitet",
+      "Die Schleimhaut des Magens bildet Schleim als Schutz vor Salzsäure und Pepsin."],
+    [T3, "Was ist der Pförtner?",
+      "Der Schließmuskel am Magenausgang",
+      "Der Eingang der Speiseröhre",
+      "Ein Teil des Dickdarms",
+      "Ein Verdauungssaft",
+      "Der Pförtner regelt die Entleerung des Magens in den Dünndarm."],
+    [T3, "Welcher Verdauungssaft wird in der Leber gebildet?",
+      "Gallensaft",
+      "Bauchspeichel",
+      "Magensaft",
+      "Darmsaft",
+      "Die Leber bildet Galle, gespeichert wird sie in der Gallenblase."],
+    [T3, "Was macht der Gallensaft?",
+      "Er zerteilt Fette in kleine Tröpfchen (Emulgierung)",
+      "Er spaltet Eiweiße",
+      "Er spaltet Kohlenhydrate",
+      "Er tötet Bakterien im Magen ab",
+      "Emulgierung: Fette werden zerlegt, damit die Lipase sie leichter spalten kann."],
+    [T3, "Was bedeutet Emulgierung?",
+      "Fett wird in feinste Tröpfchen zerteilt",
+      "Eiweiß wird zu Aminosäuren gespalten",
+      "Wasser wird zurückgewonnen",
+      "Säure wird neutralisiert",
+      "Emulgierung ist die Aufgabe der Galle."],
+    [T3, "Welche Aufgabe hat die Bauchspeicheldrüse?",
+      "Sie bildet Bauchspeichel mit Enzymen für die Verdauung aller 3 Nährstoffe und neutralisiert die Magensäure",
+      "Sie bildet Gallensaft",
+      "Sie nimmt Nährstoffe ins Blut auf",
+      "Sie gewinnt Wasser zurück",
+      "Der Bauchspeichel enthält Enzyme für Kohlenhydrate, Fette und Eiweiße."],
+    [T3, "Wo findet die Endverdauung statt?",
+      "Im Dünndarm",
+      "Im Magen",
+      "Im Dickdarm",
+      "Im Mund",
+      "Der Darmsaft des Dünndarms sorgt für die Endverdauung."],
+    [T3, "Welche Aufgabe haben die Darmzotten?",
+      "Nährstoffteilchen gehen hier ins Blut über",
+      "Sie bilden Gallensaft",
+      "Sie zerkleinern die Nahrung",
+      "Sie töten Bakterien ab",
+      "Darmzotten vergrößern die Oberfläche des Dünndarms stark."],
+    [T3, "Was passiert im Dickdarm?",
+      "Keine Verdauung mehr – Wasser wird zurückgewonnen, Darmbakterien leben dort",
+      "Hier werden Eiweiße verdaut",
+      "Hier wird Gallensaft gebildet",
+      "Hier gehen die meisten Nährstoffe ins Blut über",
+      "Im Dickdarm: Rückresorption von Wasser."],
+    [T3, "Wo werden Kohlenhydrate verdaut?",
+      "Im Mund (Speichel) und im Dünndarm",
+      "Nur im Magen",
+      "Nur im Dickdarm",
+      "In der Leber",
+      "Die Amylase im Speichel beginnt, im Dünndarm geht es weiter."],
+    [T3, "Wo werden Eiweiße verdaut?",
+      "Im Magen und im Dünndarm",
+      "Im Mund und in der Speiseröhre",
+      "Nur im Dickdarm",
+      "Nur im Mund",
+      "Im Magen mit Pepsin und Salzsäure, dann im Dünndarm."],
+    [T3, "Wo werden Fette verdaut und mit welcher Hilfe?",
+      "Im Dünndarm, mit Hilfe von Gallensaft und Lipase",
+      "Im Magen, mit Hilfe von Pepsin",
+      "Im Mund, mit Hilfe von Speichel",
+      "Im Dickdarm, mit Hilfe von Darmbakterien",
+      "Galle zerteilt das Fett, die Lipase spaltet es."],
+    [T3, "Welche Funktion hat die Leber?",
+      "Sie baut Stoffe auf, ab und um und speichert sie (z. B. Glykogen) und bildet Galle",
+      "Sie bildet nur Speichel",
+      "Sie nimmt Wasser aus dem Darm auf",
+      "Sie zerkleinert die Nahrung",
+      "Die Leber ist die größte Drüse im Körper und das „Zentrallabor“."],
+    [T3, "Was ist die größte Drüse im menschlichen Körper?",
+      "Die Leber",
+      "Die Bauchspeicheldrüse",
+      "Die Niere",
+      "Die Schilddrüse",
+      "Die Leber gilt als Zentrallabor des Körpers."],
+    [T3, "Was ist Glykogen?",
+      "Tierische Stärke, die in der Leber gespeichert wird",
+      "Ein Verdauungsenzym",
+      "Ein Vitamin",
+      "Der Endharn",
+      "Glykogen = tierische Stärke, die Leber kann es auf- und umbauen."],
+    [T3, "Was passiert in der Leber mit Aminosäuren?",
+      "Sie werden zu Harnstoff umgebaut (Ausscheidung über die Niere)",
+      "Sie werden zu Glycerin",
+      "Sie werden zu Gallensaft",
+      "Sie werden zu Kohlendioxid und Wasser",
+      "Harnstoff wird über die Niere ausgeschieden."],
+    [T3, "Was ist die richtige Reihenfolge der Verdauungsorgane?",
+      "Mund → Speiseröhre → Magen → Dünndarm → Dickdarm",
+      "Mund → Magen → Speiseröhre → Dickdarm → Dünndarm",
+      "Mund → Speiseröhre → Dünndarm → Magen → Dickdarm",
+      "Mund → Dünndarm → Magen → Speiseröhre → Dickdarm",
+      "Der Weg der Nahrung durch den Verdauungstrakt."],
+    [T3, "Wie heißen die Zotten im Dünndarm, die die Oberfläche vergrößern?",
+      "Darmzotten",
+      "Alveolen",
+      "Nierenkörperchen",
+      "Kapillaren",
+      "Alveolen gehören zur Lunge."],
+
+    /* ===== AUSSCHEIDUNG ===== */
+    [T4, "Welche Organe sind an der Ausscheidung beteiligt?",
+      "Lunge, Darm, Haut und Niere",
+      "Herz, Magen, Leber und Lunge",
+      "Lunge, Magen, Haut und Leber",
+      "Darm, Herz, Niere und Gehirn",
+      "Vier Organe scheiden Abfallprodukte aus."],
+    [T4, "Was scheidet die Lunge aus?",
+      "Wasserdampf und Kohlendioxid",
+      "Nahrungsreste und Wasser",
+      "Wasser und Salze",
+      "Endharn",
+      "Lunge: Wasserdampf und Kohlendioxid."],
+    [T4, "Was scheidet der Darm aus?",
+      "Nahrungsreste und Wasser",
+      "Wasserdampf und Kohlendioxid",
+      "Endharn",
+      "Wasser und Salze",
+      "Darm: Nahrungsreste und Wasser."],
+    [T4, "Was scheidet die Haut aus?",
+      "Wasser und Salze",
+      "Endharn",
+      "Kohlendioxid",
+      "Nahrungsreste",
+      "Haut: Wasser und Salze (Schweiß)."],
+    [T4, "Was scheiden die Nieren aus?",
+      "Endharn",
+      "Wasserdampf",
+      "Nahrungsreste",
+      "Schweiß",
+      "Niere: Endharn."],
+    [T4, "Wo liegen die Nieren?",
+      "Beiderseits der Wirbelsäule im Lendenwirbelbereich",
+      "Im Brustkorb neben dem Herzen",
+      "Unter dem Magen in der Mitte des Bauches",
+      "Im Beckenbereich neben der Harnblase",
+      "Die Nieren liegen links und rechts neben der Wirbelsäule."],
+    [T4, "Woraus besteht die Niere?",
+      "Aus Nierenrinde mit Nierenkörperchen und Nierenmark mit Nierenkanälchen",
+      "Aus Nierenmark mit Nierenkörperchen und Nierenrinde mit Nierenkanälchen",
+      "Aus Harnleiter und Harnblase",
+      "Aus Darmzotten und Kapillaren",
+      "Rinde → Nierenkörperchen, Mark → Nierenkanälchen."],
+    [T4, "Was helfen feinste Kapillaren in der Niere?",
+      "Wasser, Mineralstoffe und Traubenzucker zurückzugewinnen",
+      "Gallensaft zu bilden",
+      "Eiweiße zu spalten",
+      "Sauerstoff aufzunehmen",
+      "Rückgewinnung von Wasser, Mineralstoffen und Traubenzucker."],
+    [T4, "Wie viel Endharn wird pro Tag ungefähr ausgeschieden?",
+      "Etwa 1,5 Liter",
+      "Etwa 15 Liter",
+      "Etwa 0,15 Liter",
+      "Etwa 150 Liter",
+      "Der Endharn (Urin) gelangt durch die Harnleiter in die Harnblase."],
+    [T4, "Welchen Weg nimmt der Endharn aus der Niere?",
+      "Niere → Harnleiter → Harnblase",
+      "Niere → Harnblase → Harnleiter",
+      "Niere → Darm → Harnblase",
+      "Niere → Lunge → Harnleiter",
+      "Der Harn läuft durch die Harnleiter in die Harnblase."],
+    [T4, "Was regulieren die Nieren?",
+      "Den Salzhaushalt und den Wasserhaushalt",
+      "Den Zuckerhaushalt und den Fetthaushalt",
+      "Die Atemfrequenz",
+      "Die Körpergröße",
+      "Salz- und Wasserhaushalt des Körpers."],
+    [T4, "Was ist die Dialyse?",
+      "Eine Blutwäsche bei Nierenversagen",
+      "Eine Nierentransplantation",
+      "Eine Untersuchung der Lunge",
+      "Ein Medikament für die Leber",
+      "Bei Nierenversagen braucht man eine Dialyse oder sogar eine Transplantation."],
+    [T4, "Wann muss man zur Dialyse oder zu einer Transplantation greifen?",
+      "Bei Nierenversagen (durch Krankheit oder Unfall)",
+      "Bei Lungenentzündung",
+      "Bei Vitamin-C-Mangel",
+      "Bei Magersucht",
+      "Die Niere kann ihre Aufgabe dann nicht mehr erfüllen."],
+    [T4, "Welche Aufgabe hat die Niere NICHT?",
+      "Gallensaft bilden",
+      "Den Wasserhaushalt regeln",
+      "Den Salzhaushalt regeln",
+      "Endharn bilden",
+      "Gallensaft wird in der Leber gebildet."],
+
+    /* ===== ATMUNG ===== */
+    [T5, "Wofür wird Sauerstoff in den Zellen benötigt?",
+      "Um Nährstoffe zu „verbrennen“ und Energie zu gewinnen",
+      "Um Kohlendioxid herzustellen",
+      "Um Knochen zu bilden",
+      "Um Wasser zu speichern",
+      "Zellatmung: Nährstoffe + Sauerstoff → Energie."],
+    [T5, "Welches Abfallprodukt entsteht bei der Zellatmung?",
+      "Kohlenstoffdioxid",
+      "Stickstoff",
+      "Sauerstoff",
+      "Harnstoff",
+      "Das Kohlendioxid wird ausgeatmet."],
+    [T5, "Welche ist die einfachste Art der Atmung?",
+      "Hautatmung",
+      "Kiemenatmung",
+      "Lungenatmung",
+      "Tracheenatmung",
+      "Hautatmung z. B. bei Amphibien, beim Menschen nur ein kleiner Anteil."],
+    [T5, "Welche Tiere atmen mit Kiemen?",
+      "Fische und Krebse",
+      "Insekten",
+      "Säugetiere",
+      "Vögel",
+      "Kiemenatmung z. B. bei Fischen und Krebsen."],
+    [T5, "Welche Tiere atmen über Tracheen?",
+      "Insekten",
+      "Fische",
+      "Amphibien",
+      "Säugetiere",
+      "Tracheen führen direkt zu den Organen, die Atemgase werden nicht durch das Blut transportiert."],
+    [T5, "Welche Tiere haben Lungen als Atmungsorgan?",
+      "Säugetiere und Vögel",
+      "Fische und Krebse",
+      "Insekten und Spinnen",
+      "Nur Amphibien",
+      "Säugetiere und Vögel besitzen Lungen."],
+    [T5, "Welche 4 Atmungssysteme gibt es?",
+      "Haut-, Kiemen-, Tracheen- und Lungenatmung",
+      "Nasen-, Mund-, Haut- und Lungenatmung",
+      "Brust-, Bauch-, Haut- und Kiemenatmung",
+      "Lungen-, Herz-, Kiemen- und Tracheenatmung",
+      "Beispiele: Amphibien, Fische, Insekten, Säugetiere."],
+    [T5, "Wie ist die Zusammensetzung der Einatemluft?",
+      "78 % Stickstoff, 21 % Sauerstoff, 0,04 % Kohlendioxid",
+      "21 % Stickstoff, 78 % Sauerstoff, 0,04 % Kohlendioxid",
+      "78 % Sauerstoff, 21 % Kohlendioxid, 0,04 % Stickstoff",
+      "50 % Stickstoff, 50 % Sauerstoff",
+      "Luft besteht zum größten Teil aus Stickstoff."],
+    [T5, "Wie ist die Zusammensetzung der Ausatemluft?",
+      "16–17 % Sauerstoff und etwa 4 % Kohlendioxid",
+      "21 % Sauerstoff und 0,04 % Kohlendioxid",
+      "4 % Sauerstoff und 16 % Kohlendioxid",
+      "0 % Sauerstoff und 78 % Kohlendioxid",
+      "In der Ausatemluft steckt noch Sauerstoff, aber deutlich mehr Kohlendioxid."],
+    [T5, "Was macht die Nase beim Einatmen mit der Luft?",
+      "Sie filtert, erwärmt und befeuchtet sie",
+      "Sie kühlt und trocknet sie",
+      "Sie bildet Sauerstoff",
+      "Sie wandelt Kohlendioxid in Sauerstoff um",
+      "Filtern von Staubteilchen/Krankheitserregern, Erwärmen und Anfeuchten."],
+    [T5, "Was ist der wichtigste Atemmuskel?",
+      "Das Zwerchfell",
+      "Die Zwischenrippenmuskulatur",
+      "Der Bizeps",
+      "Das Herz",
+      "Das Zwerchfell ist der wichtigste Atemmuskel."],
+    [T5, "Was ist ein Atemhilfsmuskel?",
+      "Die Zwischenrippenmuskulatur",
+      "Das Zwerchfell",
+      "Der Kehldeckel",
+      "Die Luftröhre",
+      "Bei der intensiveren Brustatmung hilft die Zwischenrippenmuskulatur mit."],
+    [T5, "Welcher Muskel ist bei der Bauchatmung beteiligt?",
+      "Das Zwerchfell",
+      "Die Zwischenrippenmuskulatur",
+      "Die Bauchmuskeln allein",
+      "Das Herz",
+      "Bauchatmung = Zwerchfell, intensivere Brustatmung = Zwischenrippenmuskulatur."],
+    [T5, "Hebt oder senkt sich das Zwerchfell beim Einatmen?",
+      "Es senkt sich (es spannt sich an / Kontraktion)",
+      "Es hebt sich (es spannt sich an)",
+      "Es hebt sich (es erschlafft)",
+      "Es senkt sich (es erschlafft)",
+      "Beim Einatmen zieht sich das Zwerchfell zusammen und flacht ab, beim Ausatmen entspannt es sich."],
+    [T5, "Was passiert beim Ausatmen mit dem Zwerchfell?",
+      "Es entspannt sich, der Lungenraum wird eingedrückt und die Luft ausgepresst",
+      "Es spannt sich an und senkt sich",
+      "Es bleibt unverändert",
+      "Es bildet einen Unterdruck",
+      "Ausatmen = Zwerchfell entspannt sich."],
+    [T5, "Bei welchem Vorgang wird mit Unterdruck gearbeitet?",
+      "Beim Einatmen",
+      "Beim Ausatmen",
+      "Beim Verdauen",
+      "Beim Schlucken der Nahrung",
+      "Es entsteht ein Unterdruck und die Luft wird eingesaugt."],
+    [T5, "Wodurch wird die Luftröhre offen gehalten?",
+      "Durch Knorpelspangen",
+      "Durch Knochen",
+      "Durch Muskeln",
+      "Durch den Kehldeckel",
+      "Die Luftröhre wird von Knorpelspangen gefestigt."],
+    [T5, "Wozu dient der Kehldeckel?",
+      "Zum Verschließen der jeweiligen Röhre (Luftröhre oder Speiseröhre)",
+      "Zum Filtern der Atemluft",
+      "Zum Gasaustausch",
+      "Zur Bildung von Speichel",
+      "Der Kehlkopf hat einen Kehldeckel, damit sich niemand verschluckt."],
+    [T5, "Wie ist der Weg der Atemluft?",
+      "Nase/Mundraum → Rachen → Kehlkopf → Luftröhre → Hauptbronchien → Bronchiolen → Lungenbläschen",
+      "Nase → Luftröhre → Rachen → Kehlkopf → Lungenbläschen → Bronchien",
+      "Mund → Speiseröhre → Magen → Lunge",
+      "Nase → Kehlkopf → Rachen → Bronchien → Luftröhre → Lungenbläschen",
+      "Die Luft gelangt über 2 Hauptbronchien in die Lungenflügel."],
+    [T5, "Wie heißen die Lungenbläschen mit Fachbegriff?",
+      "Alveolen",
+      "Bronchiolen",
+      "Kapillaren",
+      "Tracheen",
+      "Wir haben etwa 300 Millionen Alveolen."],
+    [T5, "Wie viele Lungenbläschen (Alveolen) hat der Mensch ungefähr?",
+      "Etwa 300 Millionen",
+      "Etwa 300",
+      "Etwa 300 000",
+      "Etwa 3 Milliarden",
+      "Zusammen haben sie eine Oberfläche von etwa 100 m²."],
+    [T5, "Was passiert in den Lungenbläschen?",
+      "Der Gasaustausch zwischen Luft und Blut",
+      "Die Verdauung von Fetten",
+      "Die Bildung von Harnstoff",
+      "Die Erwärmung der Atemluft",
+      "Die große Oberfläche mit dem dichten Kapillarnetz ist für den Gasaustausch da."],
+    [T5, "Wann steigt die Atemfrequenz?",
+      "Bei Belastung (Sport), Stress und Angst",
+      "Nur im Schlaf",
+      "Nur bei Kälte",
+      "Nur nach dem Essen",
+      "Die Atemfrequenz erhöht sich bei Belastung und Stress."],
+    [T5, "Was ist der Pleuraspalt?",
+      "Der Spalt zwischen Lungenfell und Rippenfell",
+      "Der Spalt zwischen Herz und Zwerchfell",
+      "Der Raum in der Luftröhre",
+      "Die Öffnung zwischen Nase und Rachen",
+      "Der Pleuraspalt ermöglicht, dass die Lunge den Atembewegungen des Brustkorbs folgt."]
+  ];
+
+  /* ---------- Hilfsfunktionen ---------- */
+  var root = document.getElementById("bio-quiz");
+  var TOPICS = [T1, T2, T3, T4, T5];
+  var LETTERS = ["A", "B", "C", "D"];
+
+  function el(tag, cls, text) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text !== undefined) n.textContent = text;
+    return n;
+  }
+  function clear(n) { while (n.firstChild) n.removeChild(n.firstChild); }
+  function shuffle(a) {
+    a = a.slice();
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+  function focusRoot() { try { root.focus({ preventScroll: true }); } catch (e) { root.focus(); } }
+
+  /* ---------- Zustand ---------- */
+  var selected = {};   // ausgewählte Themen
+  var amount = 20;
+  var pool = [];
+  var idx = 0;
+  var score = 0;
+  var answered = false;
+  var current = null;
+  var wrongList = [];
+  var perTopic = {};
+
+  TOPICS.forEach(function (t) { selected[t] = true; });
+
+  function countFor(topics) {
+    return QUESTIONS.filter(function (q) { return topics.indexOf(q[0]) !== -1; }).length;
+  }
+  function activeTopics() { return TOPICS.filter(function (t) { return selected[t]; }); }
+
+  /* ---------- Startseite ---------- */
+  function showStart() {
+    clear(root);
+    current = null;
+    var h = el("h2");
+    h.appendChild(el("span", "", "Biologie-Quiz"));
+    root.appendChild(h);
+    root.appendChild(el("p", "bq-muted", "Ernährung, Verdauung, Ausscheidung und Atmung. Wähle die Themen, die du üben willst."));
+
+    root.appendChild(el("h3", "", "Themen"));
+    var chips = el("div", "bq-chips");
+    var startBtn = el("button", "bq-primary");
+
+    function updateStart() {
+      var n = Math.min(countFor(activeTopics()), amount === 0 ? Infinity : amount);
+      startBtn.textContent = "Quiz starten (" + n + " Fragen)";
+      startBtn.disabled = activeTopics().length === 0;
+    }
+
+    TOPICS.forEach(function (t) {
+      var c = countFor([t]);
+      var b = el("button", "bq-chip", t + " (" + c + ")");
+      b.setAttribute("aria-pressed", selected[t] ? "true" : "false");
+      b.addEventListener("click", function () {
+        selected[t] = !selected[t];
+        b.setAttribute("aria-pressed", selected[t] ? "true" : "false");
+        updateStart();
+      });
+      chips.appendChild(b);
+    });
+    root.appendChild(chips);
+
+    var row = el("div", "bq-row");
+    var lab = el("label", "bq-muted", "Anzahl der Fragen: ");
+    var sel = el("select");
+    [[10, "10"], [20, "20"], [40, "40"], [0, "Alle"]].forEach(function (o) {
+      var op = el("option", "", o[1]);
+      op.value = o[0];
+      if (o[0] === amount) op.selected = true;
+      sel.appendChild(op);
+    });
+    sel.addEventListener("change", function () { amount = parseInt(sel.value, 10); updateStart(); });
+    lab.appendChild(sel);
+    row.appendChild(lab);
+    root.appendChild(row);
+
+    var row2 = el("div", "bq-row");
+    startBtn.addEventListener("click", function () {
+      var all = QUESTIONS.filter(function (q) { return selected[q[0]]; });
+      var list = shuffle(all);
+      if (amount > 0) list = list.slice(0, amount);
+      startQuiz(list);
+    });
+    row2.appendChild(startBtn);
+    root.appendChild(row2);
+    updateStart();
+  }
+
+  /* ---------- Quiz ---------- */
+  function startQuiz(list) {
+    pool = list;
+    idx = 0;
+    score = 0;
+    wrongList = [];
+    perTopic = {};
+    showQuestion();
+  }
+
+  function showQuestion() {
+    clear(root);
+    answered = false;
+    var q = pool[idx];
+    var opts = shuffle([
+      { text: q[2], ok: true },
+      { text: q[3], ok: false },
+      { text: q[4], ok: false },
+      { text: q[5], ok: false }
+    ]);
+    current = { q: q, opts: opts };
+
+    var bar = el("div", "bq-bar");
+    var fill = el("div");
+    fill.style.width = (idx / pool.length * 100) + "%";
+    bar.appendChild(fill);
+    bar.setAttribute("role", "progressbar");
+    bar.setAttribute("aria-valuemin", "0");
+    bar.setAttribute("aria-valuemax", String(pool.length));
+    bar.setAttribute("aria-valuenow", String(idx));
+    root.appendChild(bar);
+
+    var meta = el("div", "bq-meta bq-muted");
+    meta.appendChild(el("span", "", "Frage " + (idx + 1) + " von " + pool.length));
+    meta.appendChild(el("span", "", q[0] + " · " + score + " richtig"));
+    root.appendChild(meta);
+
+    var card = el("div", "bq-card");
+    card.appendChild(el("p", "bq-q", q[1]));
+
+    var list = el("div", "bq-opts");
+    var btns = [];
+    opts.forEach(function (o, i) {
+      var b = el("button", "bq-opt");
+      b.appendChild(el("span", "bq-key", LETTERS[i]));
+      b.appendChild(el("span", "", o.text));
+      b.addEventListener("click", function () { choose(i); });
+      list.appendChild(b);
+      btns.push(b);
+    });
+    card.appendChild(list);
+
+    var fb = el("div");
+    fb.setAttribute("role", "status");
+    card.appendChild(fb);
+    root.appendChild(card);
+
+    var nextRow = el("div", "bq-row");
+    var next = el("button", "bq-primary", idx + 1 === pool.length ? "Ergebnis ansehen" : "Weiter");
+    next.style.display = "none";
+    next.addEventListener("click", goNext);
+    nextRow.appendChild(next);
+    var quit = el("button", "", "Abbrechen");
+    quit.addEventListener("click", showStart);
+    nextRow.appendChild(quit);
+    root.appendChild(nextRow);
+
+    current.btns = btns;
+    current.fb = fb;
+    current.next = next;
+    focusRoot();
+  }
+
+  function choose(i) {
+    if (answered) return;
+    answered = true;
+    var q = current.q;
+    var o = current.opts[i];
+    perTopic[q[0]] = perTopic[q[0]] || { r: 0, n: 0 };
+    perTopic[q[0]].n++;
+
+    current.btns.forEach(function (b, k) {
+      b.disabled = true;
+      if (current.opts[k].ok) b.classList.add("bq-right");
+    });
+
+    var box = el("div", "bq-fb " + (o.ok ? "ok" : "no"));
+    if (o.ok) {
+      score++;
+      perTopic[q[0]].r++;
+      box.appendChild(el("strong", "", "Richtig."));
+    } else {
+      current.btns[i].classList.add("bq-wrong");
+      wrongList.push(q);
+      box.appendChild(el("strong", "", "Nicht ganz."));
+    }
+    box.appendChild(el("span", "", q[6]));
+    current.fb.appendChild(box);
+    current.next.style.display = "";
+    current.next.focus();
+  }
+
+  function goNext() {
+    if (!answered) return;
+    idx++;
+    if (idx >= pool.length) showResult(); else showQuestion();
+  }
+
+  /* ---------- Ergebnis ---------- */
+  function showResult() {
+    clear(root);
+    current = null;
+    var pct = Math.round(score / pool.length * 100);
+    var h = el("h2");
+    h.appendChild(el("span", "", "Ergebnis"));
+    root.appendChild(h);
+    root.appendChild(el("div", "bq-score", score + " / " + pool.length));
+    var msg = pct >= 90 ? "Sehr stark – du bist bereit für den Test."
+            : pct >= 70 ? "Gut. Schau dir die Fehler unten noch einmal an."
+            : pct >= 50 ? "Noch nicht sicher. Übe die falschen Fragen gleich nochmal."
+            : "Das Thema braucht noch Zeit. Lies die Erklärungen und versuche es erneut.";
+    root.appendChild(el("p", "", pct + " % – " + msg));
+
+    var topicsDone = Object.keys(perTopic);
+    if (topicsDone.length) {
+      root.appendChild(el("h3", "", "Nach Thema"));
+      var tbl = el("table");
+      var head = el("tr");
+      head.appendChild(el("th", "", "Thema"));
+      head.appendChild(el("th", "", "Richtig"));
+      tbl.appendChild(head);
+      topicsDone.forEach(function (t) {
+        var r = el("tr");
+        r.appendChild(el("td", "", t));
+        r.appendChild(el("td", "", perTopic[t].r + " / " + perTopic[t].n));
+        tbl.appendChild(r);
+      });
+      root.appendChild(tbl);
+    }
+
+    if (wrongList.length) {
+      root.appendChild(el("h3", "", "Das solltest du nochmal anschauen"));
+      wrongList.forEach(function (q) {
+        var d = el("div", "bq-miss");
+        d.appendChild(el("b", "", q[1]));
+        d.appendChild(el("span", "", q[2]));
+        d.appendChild(el("div", "bq-muted", q[6]));
+        root.appendChild(d);
+      });
+    }
+
+    var row = el("div", "bq-row");
+    if (wrongList.length) {
+      var again = el("button", "bq-primary", "Falsche Fragen üben (" + wrongList.length + ")");
+      again.addEventListener("click", function () { startQuiz(shuffle(wrongList)); });
+      row.appendChild(again);
+    }
+    var restart = el("button", "", "Neues Quiz");
+    restart.addEventListener("click", showStart);
+    row.appendChild(restart);
+    root.appendChild(row);
+    focusRoot();
+  }
+
+  /* ---------- Tastatur: 1–4 oder A–D wählen, Enter = weiter ---------- */
+  root.addEventListener("keydown", function (e) {
+    if (!current) return;
+    var k = e.key;
+    var map = { "1": 0, "2": 1, "3": 2, "4": 3, "a": 0, "b": 1, "c": 2, "d": 3, "A": 0, "B": 1, "C": 2, "D": 3 };
+    if (!answered && map.hasOwnProperty(k)) { e.preventDefault(); choose(map[k]); }
+    else if (answered && k === "Enter") { e.preventDefault(); goNext(); }
+  });
+
+  showStart();
+})();
+</script>
+    </div>
+</body>
+</html>
