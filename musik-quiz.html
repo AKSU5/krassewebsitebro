@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Musik-Quiz</title>
+    <style>
+        html, body { margin: 0; }
+        body { position: relative; min-height: 100vh; }
+        .bar {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            width: 120px;
+            background-color: #add8f7;
+        }
+        .bar-links { left: 50px; }
+        .bar-rechts { right: 50px; }
+        .burger {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            font-size: 35px;
+            color: white;
+            background-color: black;
+            padding: 5px 12px;
+            cursor: pointer;
+            z-index: 10;
+        }
+        #menu {
+            display: none;
+            position: fixed;
+            top: 75px;
+            right: 20px;
+            background-color: black;
+            padding: 15px;
+            z-index: 10;
+        }
+        #menu a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+        }
+        #menu a:hover { background-color: #333; }
+
+        /* Quiz sitzt zwischen den beiden blauen Balken */
+        .quiz-platz { position: relative; margin: 0 200px; padding: 40px 0; }
+        @media (max-width: 900px) {
+            .bar { display: none; }
+            .quiz-platz { margin: 0 8px; padding-top: 80px; }
+        }
+    </style>
+    <script>
+        function menuOeffnen() {
+            let menu = document.getElementById("menu");
+            if (menu.style.display === "block") {
+                menu.style.display = "none";
+            } else {
+                menu.style.display = "block";
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="bar bar-links"></div>
+    <div class="bar bar-rechts"></div>
+
+    <div class="burger" onclick="menuOeffnen()">☰</div>
+
+    <div id="menu">
+        <a href="index.html">Seite 1</a>
+        <a href="seite2.html">Seite 2</a>
+        <a href="seite3.html">Seite 3</a>
+        <a href="quiz.html">Biologie-Quiz</a>
+        <a href="musik-quiz.html">Musik-Quiz</a>
+        <a href="gluecksrad.html">Glücksrad</a>
+    </div>
+
+    <div class="quiz-platz">
+<style>
+  .bq {
+    --bq-bg: #f6f7fb;
+    --bq-card: #ffffff;
+    --bq-ink: #1c2433;
+    --bq-muted: #5d6677;
+    --bq-line: #d9dde8;
+    --bq-blue: #1f3fa8;
+    --bq-blue-soft: #e4e9fb;
+    --bq-good: #1f7a4d;
+    --bq-good-soft: #dff3e8;
+    --bq-bad: #b23a2b;
+    --bq-bad-soft: #fbe5e1;
+    --bq-mark: #ffe96b;
+    box-sizing: border-box;
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 20px 16px 28px;
+    background: var(--bq-bg);
+    color: var(--bq-ink);
+    font-family: "Avenir Next", "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
+    font-size: 17px;
+    line-height: 1.5;
+    border-radius: 14px;
+    outline: none;
+  }
+  @media (prefers-color-scheme: dark) {
+    .bq {
+      --bq-bg: #151a26;
+      --bq-card: #1e2536;
+      --bq-ink: #e8ebf3;
+      --bq-muted: #a2abbd;
+      --bq-line: #333c52;
+      --bq-blue: #8fa8ff;
+      --bq-blue-soft: #26305a;
+      --bq-good: #6fd49b;
+      --bq-good-soft: #1b3a2b;
+      --bq-bad: #ff9a8a;
+      --bq-bad-soft: #43241f;
+      --bq-mark: #6b5f10;
+    }
+  }
+  .bq *, .bq *::before, .bq *::after { box-sizing: border-box; }
+  .bq h2 { margin: 0 0 6px; font-size: 1.7rem; line-height: 1.2; letter-spacing: -0.01em; }
+  .bq h2 span { background: linear-gradient(transparent 58%, var(--bq-mark) 58%); padding: 0 2px; }
+  .bq h3 { margin: 22px 0 8px; font-size: 1.05rem; }
+  .bq p { margin: 0 0 12px; }
+  .bq .bq-muted { color: var(--bq-muted); font-size: 0.95rem; }
+
+  .bq button {
+    font: inherit; color: inherit; cursor: pointer;
+    border: 1.5px solid var(--bq-line); background: var(--bq-card);
+    border-radius: 10px; padding: 10px 14px;
+  }
+  .bq button:focus-visible, .bq select:focus-visible { outline: 3px solid var(--bq-blue); outline-offset: 2px; }
+  .bq .bq-primary {
+    background: var(--bq-blue); border-color: var(--bq-blue); color: #fff; font-weight: 600;
+  }
+  @media (prefers-color-scheme: dark) { .bq .bq-primary { color: #0f1424; } }
+  .bq .bq-primary:disabled { opacity: 0.45; cursor: not-allowed; }
+
+  .bq .bq-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 4px; }
+  .bq .bq-chip { padding: 8px 12px; font-size: 0.95rem; }
+  .bq .bq-chip[aria-pressed="true"] {
+    background: var(--bq-blue-soft); border-color: var(--bq-blue); color: var(--bq-blue); font-weight: 600;
+  }
+  .bq select {
+    font: inherit; padding: 9px 10px; border-radius: 10px;
+    border: 1.5px solid var(--bq-line); background: var(--bq-card); color: var(--bq-ink);
+  }
+  .bq .bq-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 16px; }
+
+  .bq .bq-bar { height: 8px; border-radius: 99px; background: var(--bq-line); overflow: hidden; }
+  .bq .bq-bar > div { height: 100%; background: var(--bq-blue); transition: width 0.25s ease; }
+  .bq .bq-meta { display: flex; justify-content: space-between; gap: 10px; margin: 8px 0 18px; }
+
+  .bq .bq-card {
+    background: var(--bq-card); border: 1.5px solid var(--bq-line);
+    border-radius: 14px; padding: 18px 16px;
+  }
+  .bq .bq-q { font-size: 1.15rem; font-weight: 650; margin: 0 0 14px; line-height: 1.4; }
+  .bq .bq-opts { display: grid; gap: 10px; }
+  .bq .bq-opt {
+    display: flex; gap: 12px; align-items: flex-start; text-align: left; width: 100%;
+    padding: 12px 14px;
+  }
+  .bq .bq-opt .bq-key {
+    flex: none; width: 26px; height: 26px; border-radius: 7px;
+    display: grid; place-items: center; font-size: 0.85rem; font-weight: 700;
+    background: var(--bq-blue-soft); color: var(--bq-blue);
+  }
+  .bq .bq-opt:hover:not(:disabled) { border-color: var(--bq-blue); }
+  .bq .bq-opt:disabled { cursor: default; }
+  .bq .bq-opt.bq-right { background: var(--bq-good-soft); border-color: var(--bq-good); }
+  .bq .bq-opt.bq-right .bq-key { background: var(--bq-good); color: #fff; }
+  .bq .bq-opt.bq-wrong { background: var(--bq-bad-soft); border-color: var(--bq-bad); }
+  .bq .bq-opt.bq-wrong .bq-key { background: var(--bq-bad); color: #fff; }
+
+  .bq .bq-fb { margin-top: 14px; padding: 12px 14px; border-radius: 10px; border-left: 5px solid; }
+  .bq .bq-fb.ok { background: var(--bq-good-soft); border-color: var(--bq-good); }
+  .bq .bq-fb.no { background: var(--bq-bad-soft); border-color: var(--bq-bad); }
+  .bq .bq-fb strong { display: block; margin-bottom: 2px; }
+
+  .bq .bq-score { font-size: 3rem; font-weight: 750; line-height: 1.1; margin: 4px 0; }
+  .bq table { width: 100%; border-collapse: collapse; margin-top: 6px; font-size: 0.97rem; }
+  .bq th, .bq td { text-align: left; padding: 7px 6px; border-bottom: 1px solid var(--bq-line); }
+  .bq td:last-child, .bq th:last-child { text-align: right; white-space: nowrap; }
+  .bq .bq-miss { padding: 10px 0; border-bottom: 1px solid var(--bq-line); }
+  .bq .bq-miss b { display: block; }
+  .bq .bq-miss span { color: var(--bq-good); font-weight: 600; }
+
+  @media (prefers-reduced-motion: reduce) { .bq .bq-bar > div { transition: none; } }
+</style>
+
+<div class="bq" id="bio-quiz" tabindex="-1" aria-live="polite"></div>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ---------- FRAGEN ----------
+     Format: [Thema, Frage, RICHTIGE Antwort, falsch, falsch, falsch, Erklärung]
+     Die Reihenfolge der Antworten wird beim Anzeigen automatisch gemischt. */
+  var T1 = "Antike";
+  var T2 = "Gregorianischer Choral";
+  var T3 = "Romanik & Gotik";
+  var T4 = "Minnesang";
+  var T5 = "Renaissance";
+  var T6 = "Musik der Renaissance";
+
+  var QUESTIONS = [
+    [T2, "Wo wurde im ersten Jahrtausend hauptsächlich Musik ausgeübt?",
+      "In den Klöstern, mit liturgischen Gesängen",
+      "An den Fürstenhöfen",
+      "In den Theatern",
+      "Auf den Marktplätzen",
+      "Zentren der Musikausübung waren hauptsächlich die Klöster."],
+    [T2, "Wie wurden die liturgischen Gesänge ursprünglich weitergegeben?",
+      "Ausschließlich durch das Singen (mündlich)",
+      "In gedruckten Notenbüchern",
+      "In Quadratnotation",
+      "Mit dem Liniensystem",
+      "Deshalb hat die Neumenschrift große Bedeutung: sie ist die älteste Notation, seit dem 9. Jahrhundert."],
+    [T2, "Wann und wo ist die heutige Form des Gregorianischen Chorals entstanden?",
+      "Im 8./9. Jahrhundert im Frankenreich (Frankreich)",
+      "Im 12. Jahrhundert in Italien",
+      "Im 4. Jahrhundert in Griechenland",
+      "Im 16. Jahrhundert in den Niederlanden",
+      "Papst Gregor I. (+604) wird er einer Legende nach zugeschrieben."],
+    [T3, "Welcher Baustil prägte die Kirchenbauten von 1000 bis ca. 1150?",
+      "Der romanische Baustil",
+      "Der gotische Baustil",
+      "Der Renaissance-Baustil",
+      "Der antike Baustil",
+      "Merkmal: Rundbogen. Beispiel: Dom zu Speyer."],
+    [T3, "Welcher Stil löste ab 1150 die Romanik ab?",
+      "Die Gotik",
+      "Die Renaissance",
+      "Der Barock",
+      "Die Antike",
+      "Die Gotik breitete sich bis ca. 1500 aus, zuerst nach Deutschland, dann nach Italien und Spanien."],
+    [T3, "Wo liegt ein bekanntes Beispiel für eine romanische Basilika?",
+      "Der Dom zu Speyer (Deutschland)",
+      "Die Kathedrale von Amiens",
+      "Die Kathedrale von Rouen",
+      "Der Petersdom in Rom",
+      "Amiens und Rouen sind gotische Kathedralen in Frankreich."],
+    [T3, "Was ist das kennzeichnende Element der gotischen Baukunst?",
+      "Der Spitzbogen",
+      "Der Rundbogen",
+      "Die Kuppel",
+      "Die Säule mit Gebälk",
+      "Gotik = Spitzbogen, Romanik = Rundbogen."],
+
+    [T1, "Was bedeutete das griechische Wort „Musiké“ in der Antike?",
+      "Die Einheit von Dichtung, Musik und Tanz",
+      "Nur Gesang ohne Instrumente",
+      "Nur Instrumentalmusik",
+      "Das Aufschreiben von Noten",
+      "Musik, Dichtung und Tanz gehörten für die Griechen zusammen."],
+    [T1, "Welcher Philosoph sah in der Musik eine menschenbildende und staatstragende Kraft?",
+      "Platon",
+      "Aristoteles",
+      "Sokrates",
+      "Seikilos",
+      "Platon: „Erst wenn sich die Musik ändert, kann sich die Staatsform ändern!“"],
+    [T1, "Was ist das Seikiloslied?",
+      "Eines der wenigen erhaltenen Musikstücke aus der Antike",
+      "Ein gregorianischer Choral",
+      "Ein Lied von Walther von der Vogelweide",
+      "Ein Madrigal von Orlando di Lasso",
+      "Es wurde 1883 auf der Grabsäule eines gewissen Seikilos entdeckt."],
+    [T1, "Wie wurden die Noten des Seikilosliedes festgehalten?",
+      "In einer Buchstabenschrift (Buchstaben = Tonhöhe, Zusatzzeichen = Tondauer)",
+      "In Quadratnotation",
+      "In linienlosen Neumen",
+      "Im Vierliniensystem",
+      "Buchstabennotation – die Zusatzzeichen gaben die Tondauer an."],
+    [T1, "Welches war ein wichtiges antikes Zupfinstrument mit 4–7 Saiten?",
+      "Die Lyra",
+      "Der Aulos",
+      "Die Laute",
+      "Die Orgel",
+      "Die Lyra ist ein Zupfinstrument."],
+    [T1, "Was ist ein Aulos?",
+      "Ein der Oboe ähnliches Instrument, meist als Doppelaulos gespielt",
+      "Ein Zupfinstrument mit 7 Saiten",
+      "Ein Freilufttheater in Athen",
+      "Ein Chor in der Tragödie",
+      "Lyra = Zupfinstrument, Aulos = Blasinstrument."],
+    [T1, "Welche Rolle spielte der Chor in der griechischen Tragödie?",
+      "Er war ein wichtiger musikalischer Bestandteil, meist am Anfang, am Schluss und bei dramatischen Szenen",
+      "Er spielte nur in der Pause",
+      "Er war nur Zuschauer",
+      "Er spielte die Lyra",
+      "Aufführungen wurden ohne Orchester vom Chor musikalisch gestaltet."],
+    [T1, "Was ist das Odeon in Athen?",
+      "Ein Freilufttheater (erbaut 161 n. Chr., 5.000 Plätze)",
+      "Eine Kirche",
+      "Ein Instrument",
+      "Eine Grabsäule",
+      "Es bildet heute noch den Mittelpunkt der jährlichen Athener Festspiele."],
+    [T2, "Was kennzeichnet den Gregorianischen Choral?",
+      "Einstimmiger liturgischer Gesang in lateinischer Sprache ohne Instrumentalbegleitung",
+      "Mehrstimmiger weltlicher Gesang mit Laute",
+      "Einstimmiger weltlicher Gesang auf Deutsch",
+      "Vierstimmiger Chorsatz mit Orgelbegleitung",
+      "Der Gregorianische Choral ist nach Papst Gregor I. benannt."],
+    [T2, "Nach welchem Papst ist der Gregorianische Choral benannt?",
+      "Papst Gregor I.",
+      "Papst Gregor XIII.",
+      "Papst Leo X.",
+      "Papst Johannes Paul II.",
+      "Er wird einer Legende nach dem Liturgiereformer Papst Gregor I. (+604) zugeschrieben."],
+    [T2, "Was bedeutet das Wort „Neuma“?",
+      "Wink, Zeichen, Geste",
+      "Lied, Gesang, Chor",
+      "Ton, Klang, Laut",
+      "Linie, Strich, Notenblatt",
+      "Neumen sind die älteste Notation, seit dem 9. Jahrhundert, zuerst linienlos."],
+    [T2, "Wer führte das Liniensystem (im Terzabstand, vier Linien) ein?",
+      "Guido von Arezzo",
+      "Perotinus Magnus",
+      "Johannes Gutenberg",
+      "Walther von der Vogelweide",
+      "Guido von Arezzo (um 992 – ca. 1050): Das heute gebräuchliche Liniensystem geht auf ihn zurück."],
+    [T3, "Was ist das kennzeichnende Merkmal des romanischen Baustils?",
+      "Der Rundbogen",
+      "Der Spitzbogen",
+      "Die Kuppel",
+      "Das Flachdach",
+      "Romanik: ca. 1000 bis 1150. Gotik: Spitzbogen."],
+    [T3, "Von wo ging die Gotik aus?",
+      "Von Paris (Île-de-France)",
+      "Von Florenz",
+      "Von Rom",
+      "Von Wien",
+      "Die Gotik löste ab 1150 die Romanik ab."],
+    [T3, "Wer schrieb um 1200 an der Kathedrale Notre-Dame in Paris drei- und vierstimmige Organa?",
+      "Perotinus Magnus",
+      "Guido von Arezzo",
+      "Orlando di Lasso",
+      "Heinrich Isaac",
+      "Es sind die ersten bedeutenden mehrstimmigen Werke der Musikgeschichte."],
+    [T3, "Wie heißt die Notenschrift, die Perotinus verwendete und die die Grundlage unserer heutigen Notation bildet?",
+      "Quadratnotation (römische Choralnotation)",
+      "Buchstabennotation",
+      "Linienlose Neumen",
+      "Tabulatur",
+      "Sie hat bereits Linien und quadratische Neumen."],
+    [T4, "Wie heißen die fahrenden Sänger in Frankreich südlich der Loire?",
+      "Troubadours",
+      "Trouvères",
+      "Minnesänger",
+      "Meistersinger",
+      "Trouvères = nördlich der Loire, Minnesänger = deutscher Sprachraum."],
+    [T4, "Was bedeutet „Minne“?",
+      "Liebe im weitesten Sinn",
+      "Musik",
+      "Ritter",
+      "Gesang",
+      "Minnesänger = fahrende Sänger, die über die Liebe sangen."],
+    [T4, "Wer war der wichtigste Minnesänger?",
+      "Walther von der Vogelweide",
+      "Heinrich Isaac",
+      "Perotinus Magnus",
+      "Johannes Gutenberg",
+      "Walther (um 1170–1230) war an den Fürstenhöfen ein gern gesehener Gast."],
+    [T4, "Worüber sangen die Troubadours und Trouvères in ihren Liedern?",
+      "Natur, Heldentaten der Ritter, Lebensweisheiten, Religion und vor allem Frauenverehrung",
+      "Nur über Religion",
+      "Nur über Politik",
+      "Nur über Handwerk und Landwirtschaft",
+      "Sie waren Dichter, Komponist und Sänger in einer Person."],
+    [T5, "Was bedeutet das Wort „Renaissance“?",
+      "Wiedergeburt",
+      "Neuanfang",
+      "Aufklärung",
+      "Erfindung",
+      "Renaissance ist französisch für „Wiedergeburt“."],
+    [T5, "In welchem Zeitraum liegt die Renaissance?",
+      "Im 15. und 16. Jahrhundert",
+      "Im 12. und 13. Jahrhundert",
+      "Im 17. und 18. Jahrhundert",
+      "Im 19. Jahrhundert",
+      "Sie ging von Italien aus und verbreitete sich über ganz Europa."],
+    [T5, "Woran orientierte man sich in der Renaissance als Ideal menschlicher Vollkommenheit?",
+      "An der Antike (Humanismus)",
+      "Am Rittertum",
+      "An der Gotik",
+      "An der Romanik",
+      "Das Leben und Schrifttum der Antike war das Vorbild."],
+    [T5, "Was war das Zentrum der Renaissance?",
+      "Florenz",
+      "Paris",
+      "Wien",
+      "Athen",
+      "In Florenz ragt der Dom mit seiner Kuppel von Brunelleschi hervor."],
+    [T5, "Wer ist der Erbauer der Kuppel des Petersdoms in Rom und Schöpfer der Fresken in der Sixtinischen Kapelle?",
+      "Michelangelo Buonarroti",
+      "Leonardo da Vinci",
+      "Albrecht Dürer",
+      "Filippo Brunelleschi",
+      "Michelangelo schuf auch die Pietà aus Marmor."],
+    [T5, "Was ist die Zentralperspektive?",
+      "Eine exakte Darstellung mit sorgfältig berechneten Proportionen, entstanden aus Mathematik und Geometrie",
+      "Eine Maltechnik auf feuchtem Putz",
+      "Eine Form der Notenschrift",
+      "Ein Baustil mit Spitzbögen",
+      "Fresko = Malerei auf noch feuchtem Putz."],
+    [T5, "Wer war eine universell begabte Persönlichkeit (Maler, Naturforscher, Erfinder), der die Mona Lisa malte?",
+      "Leonardo da Vinci",
+      "Michelangelo",
+      "Albrecht Dürer",
+      "Johannes Gutenberg",
+      "Die Mona Lisa ist im Louvre in Paris zu sehen."],
+    [T5, "Wer erfand um 1450 den Buchdruck mit beweglichen Lettern?",
+      "Johannes Gutenberg",
+      "Ottaviano Petrucci",
+      "Martin Luther",
+      "Christoph Kolumbus",
+      "Seine Technik wurde vom Venezianer Petrucci für den Notendruck weiterentwickelt."],
+    [T5, "Wer entwickelte die Drucktechnik für den Notendruck weiter?",
+      "Petrucci",
+      "Gutenberg",
+      "Michelangelo",
+      "Perotinus",
+      "Der Venezianer Petrucci."],
+    [T5, "Welche neue musikalische Gattung schuf Martin Luther?",
+      "Das evangelische Kirchenlied (evangelischer Choral)",
+      "Das Madrigal",
+      "Die Motette",
+      "Das Organum",
+      "Er legte im Gottesdienst Wert auf die Mitwirkung der Gemeinde."],
+    [T5, "Welches Ereignis wird Christoph Kolumbus 1492 zugeschrieben?",
+      "Die Entdeckung Amerikas",
+      "Die Erfindung des Buchdrucks",
+      "Die Übersetzung des Neuen Testaments",
+      "Der Bau des Petersdoms",
+      "Er wollte eigentlich Indien auf dem Seeweg erreichen."],
+    [T6, "Wer beherrschte für fast 200 Jahre die Musikszene der Renaissance?",
+      "Die „Niederländer“",
+      "Die Franzosen",
+      "Die Spanier",
+      "Die Griechen",
+      "Niederländer = aus den heutigen Niederlanden, Belgien und Nordostfrankreich."],
+    [T6, "Was ist eine Motette?",
+      "Ein geistliches Chorwerk, meist a cappella",
+      "Ein weltliches Chorwerk, meist a cappella",
+      "Die Vertonung der gleichbleibenden Teile der Liturgie",
+      "Ein einstimmiges weltliches Lied",
+      "Geistlich = Motette, weltlich = Madrigal."],
+    [T6, "Was ist ein Madrigal?",
+      "Ein weltliches Chorwerk, meist a cappella",
+      "Ein geistliches Chorwerk, meist a cappella",
+      "Ein Orchesterstück",
+      "Ein Instrument",
+      "Beispiel: Audite nova von Orlando di Lasso."],
+    [T6, "Was bedeutet „a cappella“?",
+      "Nur vokal, ohne Instrumente",
+      "Mit Orgelbegleitung",
+      "Mit vollem Orchester",
+      "Ganz leise",
+      "A cappella = nur vokal."],
+    [T6, "Was vertont eine Messe?",
+      "Die gleichbleibenden liturgischen Teile (Kyrie, Gloria, Credo, Sanctus, Agnus Dei)",
+      "Weltliche Liebeslieder",
+      "Heldengeschichten",
+      "Nur Psalmen",
+      "Diese gleichbleibenden Teile heißen Ordinarium."],
+    [T6, "Wie heißen die gleichbleibenden Teile der Messe?",
+      "Ordinarium",
+      "Proprium",
+      "Organum",
+      "Choral",
+      "Ordinarium: Kyrie, Gloria, Credo, Sanctus, Agnus Dei."],
+    [T6, "Was ist ein Gesellschaftslied?",
+      "Ein einstimmiges oder mehrstimmiges weltliches Lied",
+      "Ein geistliches Chorwerk",
+      "Ein Lied nur für die Kirche",
+      "Eine Oper",
+      "Beispiel: Innsbruck, ich muss dich lassen von Heinrich Isaac."],
+    [T6, "Was ist der Unterschied zwischen Homofonie und Polyfonie?",
+      "Bei Homofonie tritt die Melodiestimme hervor und die anderen begleiten, bei Polyfonie sind die einzelnen Stimmen eigenständig",
+      "Homofonie ist einstimmig, Polyfonie zweistimmig",
+      "Homofonie ist weltlich, Polyfonie geistlich",
+      "Es gibt keinen Unterschied",
+      "Beides sind Satztechniken."],
+    [T6, "Wo wirkte Orlando di Lasso die letzten 30 Lebensjahre?",
+      "An der Münchner Hofkapelle",
+      "An der päpstlichen Kapelle in Rom",
+      "In Notre-Dame in Paris",
+      "In Innsbruck",
+      "Geboren wurde er in Mons (heute Belgien)."],
+    [T6, "Wer war ab 1571 Komponist der päpstlichen Kapelle in Rom und gab einem Stil seinen Namen?",
+      "Giovanni Pierluigi da Palestrina",
+      "Orlando di Lasso",
+      "Heinrich Isaac",
+      "Perotinus Magnus",
+      "Der Palestrina-Stil: Die vokale Chormusik erreichte hier ihren Höhepunkt."],
+    [T6, "Welcher Komponist wirkte unter Kaiser Maximilian I. in Innsbruck?",
+      "Heinrich Isaac",
+      "Giovanni Pierluigi da Palestrina",
+      "Orlando di Lasso",
+      "Walther von der Vogelweide",
+      "Maximilian I. wurde „der letzte Ritter“ genannt und hatte eine eigene Hofkapelle."],
+    [T6, "Von wem stammt die Melodie des Liedes „Innsbruck, ich muss dich lassen“?",
+      "Von Heinrich Isaac",
+      "Von Kaiser Maximilian I.",
+      "Von Walther von der Vogelweide",
+      "Von Martin Luther",
+      "Der Überlieferung nach schrieb Maximilian I. den Text selbst."]
+  ];
+
+  /* ---------- Hilfsfunktionen ---------- */
+  var root = document.getElementById("bio-quiz");
+  var TOPICS = [T1, T2, T3, T4, T5, T6];
+  var LETTERS = ["A", "B", "C", "D"];
+
+  function el(tag, cls, text) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text !== undefined) n.textContent = text;
+    return n;
+  }
+  function clear(n) { while (n.firstChild) n.removeChild(n.firstChild); }
+  function shuffle(a) {
+    a = a.slice();
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+  function focusRoot() { try { root.focus({ preventScroll: true }); } catch (e) { root.focus(); } }
+
+  /* ---------- Zustand ---------- */
+  var selected = {};   // ausgewählte Themen
+  var amount = 10;
+  var pool = [];
+  var idx = 0;
+  var score = 0;
+  var answered = false;
+  var current = null;
+  var wrongList = [];
+  var perTopic = {};
+
+  TOPICS.forEach(function (t) { selected[t] = true; });
+
+  function countFor(topics) {
+    return QUESTIONS.filter(function (q) { return topics.indexOf(q[0]) !== -1; }).length;
+  }
+  function activeTopics() { return TOPICS.filter(function (t) { return selected[t]; }); }
+
+  /* ---------- Startseite ---------- */
+  function showStart() {
+    clear(root);
+    current = null;
+    var h = el("h2");
+    h.appendChild(el("span", "", "Musik-Quiz"));
+    root.appendChild(h);
+    root.appendChild(el("p", "bq-muted", "Von der Antike bis zur Renaissance. Wähle die Themen, die du üben willst."));
+
+    root.appendChild(el("h3", "", "Themen"));
+    var chips = el("div", "bq-chips");
+    var startBtn = el("button", "bq-primary");
+
+    function updateStart() {
+      var n = Math.min(countFor(activeTopics()), amount === 0 ? Infinity : amount);
+      startBtn.textContent = "Quiz starten (" + n + " Fragen)";
+      startBtn.disabled = activeTopics().length === 0;
+    }
+
+    TOPICS.forEach(function (t) {
+      var c = countFor([t]);
+      var b = el("button", "bq-chip", t + " (" + c + ")");
+      b.setAttribute("aria-pressed", selected[t] ? "true" : "false");
+      b.addEventListener("click", function () {
+        selected[t] = !selected[t];
+        b.setAttribute("aria-pressed", selected[t] ? "true" : "false");
+        updateStart();
+      });
+      chips.appendChild(b);
+    });
+    root.appendChild(chips);
+
+    var row = el("div", "bq-row");
+    var lab = el("label", "bq-muted", "Anzahl der Fragen: ");
+    var sel = el("select");
+    [[10, "10"], [20, "20"], [0, "Alle"]].forEach(function (o) {
+      var op = el("option", "", o[1]);
+      op.value = o[0];
+      if (o[0] === amount) op.selected = true;
+      sel.appendChild(op);
+    });
+    sel.addEventListener("change", function () { amount = parseInt(sel.value, 10); updateStart(); });
+    lab.appendChild(sel);
+    row.appendChild(lab);
+    root.appendChild(row);
+
+    var row2 = el("div", "bq-row");
+    startBtn.addEventListener("click", function () {
+      var all = QUESTIONS.filter(function (q) { return selected[q[0]]; });
+      var list = shuffle(all);
+      if (amount > 0) list = list.slice(0, amount);
+      startQuiz(list);
+    });
+    row2.appendChild(startBtn);
+    root.appendChild(row2);
+    updateStart();
+  }
+
+  /* ---------- Quiz ---------- */
+  function startQuiz(list) {
+    pool = list;
+    idx = 0;
+    score = 0;
+    wrongList = [];
+    perTopic = {};
+    showQuestion();
+  }
+
+  function showQuestion() {
+    clear(root);
+    answered = false;
+    var q = pool[idx];
+    var opts = shuffle([
+      { text: q[2], ok: true },
+      { text: q[3], ok: false },
+      { text: q[4], ok: false },
+      { text: q[5], ok: false }
+    ]);
+    current = { q: q, opts: opts };
+
+    var bar = el("div", "bq-bar");
+    var fill = el("div");
+    fill.style.width = (idx / pool.length * 100) + "%";
+    bar.appendChild(fill);
+    bar.setAttribute("role", "progressbar");
+    bar.setAttribute("aria-valuemin", "0");
+    bar.setAttribute("aria-valuemax", String(pool.length));
+    bar.setAttribute("aria-valuenow", String(idx));
+    root.appendChild(bar);
+
+    var meta = el("div", "bq-meta bq-muted");
+    meta.appendChild(el("span", "", "Frage " + (idx + 1) + " von " + pool.length));
+    meta.appendChild(el("span", "", q[0] + " · " + score + " richtig"));
+    root.appendChild(meta);
+
+    var card = el("div", "bq-card");
+    card.appendChild(el("p", "bq-q", q[1]));
+
+    var list = el("div", "bq-opts");
+    var btns = [];
+    opts.forEach(function (o, i) {
+      var b = el("button", "bq-opt");
+      b.appendChild(el("span", "bq-key", LETTERS[i]));
+      b.appendChild(el("span", "", o.text));
+      b.addEventListener("click", function () { choose(i); });
+      list.appendChild(b);
+      btns.push(b);
+    });
+    card.appendChild(list);
+
+    var fb = el("div");
+    fb.setAttribute("role", "status");
+    card.appendChild(fb);
+    root.appendChild(card);
+
+    var nextRow = el("div", "bq-row");
+    var next = el("button", "bq-primary", idx + 1 === pool.length ? "Ergebnis ansehen" : "Weiter");
+    next.style.display = "none";
+    next.addEventListener("click", goNext);
+    nextRow.appendChild(next);
+    var quit = el("button", "", "Abbrechen");
+    quit.addEventListener("click", showStart);
+    nextRow.appendChild(quit);
+    root.appendChild(nextRow);
+
+    current.btns = btns;
+    current.fb = fb;
+    current.next = next;
+    focusRoot();
+  }
+
+  function choose(i) {
+    if (answered) return;
+    answered = true;
+    var q = current.q;
+    var o = current.opts[i];
+    perTopic[q[0]] = perTopic[q[0]] || { r: 0, n: 0 };
+    perTopic[q[0]].n++;
+
+    current.btns.forEach(function (b, k) {
+      b.disabled = true;
+      if (current.opts[k].ok) b.classList.add("bq-right");
+    });
+
+    var box = el("div", "bq-fb " + (o.ok ? "ok" : "no"));
+    if (o.ok) {
+      score++;
+      perTopic[q[0]].r++;
+      box.appendChild(el("strong", "", "Richtig."));
+    } else {
+      current.btns[i].classList.add("bq-wrong");
+      wrongList.push(q);
+      box.appendChild(el("strong", "", "Nicht ganz."));
+    }
+    box.appendChild(el("span", "", q[6]));
+    current.fb.appendChild(box);
+    current.next.style.display = "";
+    current.next.focus();
+  }
+
+  function goNext() {
+    if (!answered) return;
+    idx++;
+    if (idx >= pool.length) showResult(); else showQuestion();
+  }
+
+  /* ---------- Ergebnis ---------- */
+  function showResult() {
+    clear(root);
+    current = null;
+    var pct = Math.round(score / pool.length * 100);
+    var h = el("h2");
+    h.appendChild(el("span", "", "Ergebnis"));
+    root.appendChild(h);
+    root.appendChild(el("div", "bq-score", score + " / " + pool.length));
+    var msg = pct >= 90 ? "Sehr stark – du bist bereit für den Test."
+            : pct >= 70 ? "Gut. Schau dir die Fehler unten noch einmal an."
+            : pct >= 50 ? "Noch nicht sicher. Übe die falschen Fragen gleich nochmal."
+            : "Das Thema braucht noch Zeit. Lies die Erklärungen und versuche es erneut.";
+    root.appendChild(el("p", "", pct + " % – " + msg));
+
+    var topicsDone = Object.keys(perTopic);
+    if (topicsDone.length) {
+      root.appendChild(el("h3", "", "Nach Thema"));
+      var tbl = el("table");
+      var head = el("tr");
+      head.appendChild(el("th", "", "Thema"));
+      head.appendChild(el("th", "", "Richtig"));
+      tbl.appendChild(head);
+      topicsDone.forEach(function (t) {
+        var r = el("tr");
+        r.appendChild(el("td", "", t));
+        r.appendChild(el("td", "", perTopic[t].r + " / " + perTopic[t].n));
+        tbl.appendChild(r);
+      });
+      root.appendChild(tbl);
+    }
+
+    if (wrongList.length) {
+      root.appendChild(el("h3", "", "Das solltest du nochmal anschauen"));
+      wrongList.forEach(function (q) {
+        var d = el("div", "bq-miss");
+        d.appendChild(el("b", "", q[1]));
+        d.appendChild(el("span", "", q[2]));
+        d.appendChild(el("div", "bq-muted", q[6]));
+        root.appendChild(d);
+      });
+    }
+
+    var row = el("div", "bq-row");
+    if (wrongList.length) {
+      var again = el("button", "bq-primary", "Falsche Fragen üben (" + wrongList.length + ")");
+      again.addEventListener("click", function () { startQuiz(shuffle(wrongList)); });
+      row.appendChild(again);
+    }
+    var restart = el("button", "", "Neues Quiz");
+    restart.addEventListener("click", showStart);
+    row.appendChild(restart);
+    root.appendChild(row);
+    focusRoot();
+  }
+
+  /* ---------- Tastatur: 1–4 oder A–D wählen, Enter = weiter ---------- */
+  root.addEventListener("keydown", function (e) {
+    if (!current) return;
+    var k = e.key;
+    var map = { "1": 0, "2": 1, "3": 2, "4": 3, "a": 0, "b": 1, "c": 2, "d": 3, "A": 0, "B": 1, "C": 2, "D": 3 };
+    if (!answered && map.hasOwnProperty(k)) { e.preventDefault(); choose(map[k]); }
+    else if (answered && k === "Enter") { e.preventDefault(); goNext(); }
+  });
+
+  showStart();
+})();
+</script>
+    </div>
+</body>
+</html>

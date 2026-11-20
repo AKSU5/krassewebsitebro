@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Glücksrad</title>
+<style>
+    html, body { margin: 0; }
+    body { position: relative; min-height: 100vh; font-family: "Inter", sans-serif; }
+
+    .bar { position: absolute; top: 0; height: 100%; width: 120px; background-color: #add8f7; }
+    .bar-links { left: 50px; }
+    .bar-rechts { right: 50px; }
+
+    .burger { position: fixed; top: 20px; right: 20px; font-size: 35px; color: white;
+              background-color: black; padding: 5px 12px; cursor: pointer; z-index: 10; }
+    #menu { display: none; position: fixed; top: 75px; right: 20px; background-color: black;
+            padding: 15px; z-index: 10; }
+    #menu a { display: block; color: white; text-decoration: none; padding: 10px 20px; }
+    #menu a:hover { background-color: #333; }
+
+    /* Inhalt zwischen den Balken */
+    .inhalt { position: relative; margin: 0 200px; padding: 40px 0; text-align: center; }
+
+    h1 { font-size: 40px; margin-top: 10px; }
+
+    /* Rad + Zeiger */
+    .rad-box { position: relative; width: 400px; margin: 20px auto; }
+    #rad { display: block; width: 400px; height: 400px; }
+    .zeiger {
+        position: absolute; top: -8px; left: 50%; transform: translateX(-50%);
+        width: 0; height: 0;
+        border-left: 16px solid transparent;
+        border-right: 16px solid transparent;
+        border-top: 32px solid black;
+    }
+
+    .roter-button { background-color: red; color: white; border: none; padding: 12px 25px;
+                    font-size: 18px; cursor: pointer; border-radius: 8px; }
+    .roter-button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    #ergebnis { font-size: 28px; font-weight: 700; min-height: 40px; margin: 20px 0; }
+
+    .einstellungen { margin-top: 30px; }
+    .einstellungen input[type="number"] { width: 60px; padding: 6px; font-size: 16px; }
+    #feldListe input { display: block; margin: 6px auto; padding: 6px; font-size: 16px; width: 220px; }
+
+    @media (max-width: 900px) {
+        .bar { display: none; }
+        .inhalt { margin: 0 8px; padding-top: 80px; }
+        .rad-box, #rad { width: 300px; height: 300px; }
+    }
+</style>
+</head>
+<body>
+    <div class="bar bar-links"></div>
+    <div class="bar bar-rechts"></div>
+
+    <div class="burger" onclick="menuOeffnen()">☰</div>
+    <div id="menu">
+        <a href="index.html">Seite 1</a>
+        <a href="seite2.html">Seite 2</a>
+        <a href="seite3.html">Seite 3</a>
+        <a href="quiz.html">Biologie-Quiz</a>
+        <a href="gluecksrad.html">Glücksrad</a>
+        <a href="musik-quiz.html">Musik-Quiz</a>
+    </div>
+
+    <div class="inhalt">
+        <h1>Glücksrad</h1>
+
+        <div class="rad-box">
+            <div class="zeiger"></div>
+            <canvas id="rad" width="400" height="400"></canvas>
+        </div>
+
+        <button class="roter-button" id="drehButton" onclick="drehen()">Drehen!</button>
+        <div id="ergebnis"></div>
+
+        <div class="einstellungen">
+            <h2>Einstellungen</h2>
+            <label>Anzahl der Felder:
+                <input type="number" id="anzahl" min="2" max="30" value="6" onchange="anzahlGeaendert()">
+            </label>
+            <div id="feldListe"></div>
+        </div>
+    </div>
+
+<script>
+    "use strict";
+
+    function menuOeffnen() {
+        let menu = document.getElementById("menu");
+        menu.style.display = (menu.style.display === "block") ? "none" : "block";
+    }
+
+    /* ===== Daten ===== */
+    let felder = ["Feld 1", "Feld 2", "Feld 3", "Feld 4", "Feld 5", "Feld 6"];
+    let winkel = 0;          // aktuelle Drehung des Rads (in Bogenmaß)
+    let dreht = false;       // true, solange das Rad sich dreht
+
+    const farben = ["#e6194b", "#3cb44b", "#ffe119", "#4363d8", "#f58231",
+                    "#911eb4", "#46f0f0", "#f032e6", "#bcf60c", "#fabebe"];
+
+    const canvas = document.getElementById("rad");
+    const ctx = canvas.getContext("2d");
+
+    /* ===== Rad zeichnen ===== */
+    function zeichneRad() {
+        const n = felder.length;
+        const mitte = canvas.width / 2;
+        const radius = mitte - 10;
+        const seg = (2 * Math.PI) / n;
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        for (let i = 0; i < n; i++) {
+            // Tortenstück
+            ctx.beginPath();
+            ctx.moveTo(mitte, mitte);
+            ctx.arc(mitte, mitte, radius, winkel + i * seg, winkel + (i + 1) * seg);
+            ctx.closePath();
+            ctx.fillStyle = farben[i % farben.length];
+            ctx.fill();
+            ctx.strokeStyle = "white";
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // Beschriftung
+            ctx.save();
+            ctx.translate(mitte, mitte);
+            ctx.rotate(winkel + i * seg + seg / 2);
+            ctx.textAlign = "right";
+            ctx.fillStyle = "black";
+            ctx.font = "bold 18px sans-serif";
+            ctx.fillText(felder[i], radius - 15, 6);
+            ctx.restore();
+        }
+    }
+
+    /* ===== Drehen ===== */
+    function drehen() {
+        if (dreht) return;
+        dreht = true;
+        document.getElementById("drehButton").disabled = true;
+        document.getElementById("ergebnis").textContent = "";
+
+        const start = winkel;
+        const gesamt = (5 + Math.random() * 3) * 2 * Math.PI + Math.random() * 2 * Math.PI;
+        const dauer = 4000; // 4 Sekunden
+        const startZeit = performance.now();
+
+        function schritt(jetzt) {
+            let t = Math.min((jetzt - startZeit) / dauer, 1);
+            let weich = 1 - Math.pow(1 - t, 3);   // langsamer werden am Ende
+            winkel = start + gesamt * weich;
+            zeichneRad();
+
+            if (t < 1) {
+                requestAnimationFrame(schritt);
+            } else {
+                dreht = false;
+                document.getElementById("drehButton").disabled = false;
+                zeigeGewinner();
+            }
+        }
+        requestAnimationFrame(schritt);
+    }
+
+    /* ===== Gewinner bestimmen ===== */
+    function zeigeGewinner() {
+        const n = felder.length;
+        const seg = (2 * Math.PI) / n;
+        const zeigerWinkel = -Math.PI / 2;   // Zeiger steht oben
+
+        // Wie weit ist der Zeiger vom Rad-Nullpunkt entfernt?
+        let relativ = (zeigerWinkel - winkel) % (2 * Math.PI);
+        if (relativ < 0) relativ += 2 * Math.PI;
+
+        const index = Math.floor(relativ / seg);
+        document.getElementById("ergebnis").textContent = "🎉 " + felder[index];
+    }
+
+    /* ===== Einstellungen ===== */
+    function anzahlGeaendert() {
+        let n = parseInt(document.getElementById("anzahl").value, 10);
+        if (isNaN(n) || n < 2) n = 2;
+        if (n > 30) n = 30;
+        document.getElementById("anzahl").value = n;
+
+        // Liste anpassen: alte Namen behalten, neue Felder auffüllen
+        while (felder.length < n) felder.push("Feld " + (felder.length + 1));
+        felder.length = n;
+
+        baueEingaben();
+        zeichneRad();
+    }
+
+    function baueEingaben() {
+        const liste = document.getElementById("feldListe");
+        liste.innerHTML = "";
+        felder.forEach(function (name, i) {
+            const inp = document.createElement("input");
+            inp.type = "text";
+            inp.value = name;
+            inp.maxLength = 20;
+            inp.addEventListener("input", function () {
+                felder[i] = inp.value;
+                zeichneRad();
+            });
+            liste.appendChild(inp);
+        });
+    }
+
+    /* ===== Start ===== */
+    baueEingaben();
+    zeichneRad();
+</script>
+</body>
+</html>
